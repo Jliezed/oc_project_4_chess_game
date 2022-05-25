@@ -1,77 +1,340 @@
 from arts import logo
-from tinydb import TinyDB, Query, where
-
-database = TinyDB("database.json")
-players_table = database.table("players")
-tournaments_table = database.table("tournaments")
+from datetime import datetime
 
 
-class View:
+class ViewMainMenu:
+    """
+    Main view that display the menu options
+    """
+    def __init__(self):
+        pass
+
     def show_logo(self):
         print(logo)
 
     def display_menu(self):
-        print("---------------------- MENU ----------------------\n"
-              "-------------------- CREATION --------------------\n"
-              "enter 'p' : Add a player to the database\n"
-              "enter 't' : Create a new Tournament\n"
-              "-------------------- DATABASE --------------------\n"
-              "enter 'pl' : Display list of players\n"
-              "enter 'pi' : Access player information\n"
-              "enter 'tl' : Display list of tournaments\n"
-              "enter 'ti' : Access tournament information\n"
-              "--------------- TOURNAMENT TRACKER ---------------\n"
-              "enter 'TT' : Track a tournament\n"
-              "-------------------- DELETION --------------------\n"
-              "enter 'dp' : Delete a player from the database\n"
-              "enter 'dt' : Delete a tournament from the database\n"
-              "--------------------------------------------------\n"
-              "Press 'q' to QUIT"
-              )
-        user_action = input("What is you selection ?: ")
-        return user_action
+        """ Display user options for the main menu"""
+        print(
+            "---------------------- MENU ----------------------\n"
+            "-------------------- CREATION --------------------\n"
+            "enter 'p' : Add a player to the database\n"
+            "enter 't' : Create a new Tournament\n"
+            "-------------------- DATABASE --------------------\n"
+            "enter 'pl' : Display list of players\n"
+            "enter 'pi' : Access player information\n"
+            "enter 'tl' : Display list of tournaments\n"
+            "enter 'ti' : Access tournament information\n"
+            "--------------- TOURNAMENT TRACKER ---------------\n"
+            "enter 'tt' : Track a tournament\n"
+            "-------------------- RESET --------------------\n"
+            "enter 'reset' : Reset database\n"
+            "--------------------------------------------------\n"
+            "Press 'q' to QUIT"
+        )
 
     def back_to_menu(self):
-        back_to_menu = input("Would you like to GO BACK to the MENU? Enter 'yes' or 'no': ").lower()
+        """ Ask user to go back to the menu """
+        back_to_menu = input(
+            "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
+        ).lower()
         return back_to_menu
 
-    def display_all_players_database(self):
+    def confirm_reset(self):
+        """ Ask user confirmation before to reset the database """
+        confirm_reset = input(
+            "Are you sure you want to reset the database ? Enter 'yes' or 'no': "
+        ).lower()
+        return confirm_reset
+
+
+class ViewMainMenuPlayer:
+    """
+    View specific to player options in the main menu (add a player to the database, display list of players,..)
+    """
+    def __init__(self):
+        self.player_infos = {}
+        self.should_save_player = ""
+
+    def get_player_info(self):
+        """
+        Ask user for player information
+        :return: dict of player information
+        """
+        first_name = input("enter player first name: ").title()
+        last_name = input("enter player last name: ").title()
+
+        is_gender = ""
+        while not is_gender:
+            gender = input("enter player gender (male/female): ").lower()
+            if gender == "male" or gender == "female":
+                is_gender = True
+            else:
+                print("Please enter 'male' or 'female': ")
+                is_gender = False
+
+        is_date = ""
+        birth_date = ""
+        while not is_date:
+            try:
+                birth_date = input("enter player birth date (DD/MM/YYYY): ")
+                birth_date = datetime.strptime(birth_date, "%d/%m/%Y")
+                is_date = True
+            except ValueError as message_error:
+                print(f"*{birth_date}* is not a date format.")
+                print(message_error)
+        birth_date = str(birth_date)
+
+        rank = 0
+        is_int = ""
+        while not is_int:
+            try:
+                rank = int(input("enter player rank (number): "))
+                is_int = True
+            except ValueError as message_error:
+                print(f"*{rank}* is not an integer.")
+                print(message_error)
+
+        self.player_infos = {
+            "first_name": first_name,
+            "last_name": last_name,
+            "birth_date": birth_date,
+            "gender": gender,
+            "rank": rank,
+        }
+        return self.player_infos
+
+    def should_save_player(self):
+        """ Ask confirmation to save player information to the database"""
+        self.should_save_player = input(
+            "Would you like to SAVE the player in the database ? Enter 'yes' or 'no': "
+        ).lower()
+        return self.should_save_player
+
+    def display_all_players(self, players_table):
+        """
+        Display list of all players saved in the database
+        :param players_table: refers to the player tab in the database
+        :return: print list of all players in the database
+        """
         print("----- LIST OF ALL PLAYERS IN THE DATABASE -----")
-        print(f"There are {len(database.table('players'))} players in the database:")
-        for item in database.table("players"):
+        print(f"There are {len(players_table)} players in the database: ")
+        for item in players_table:
             print(f"Fullname: {item['fullname']}\t -\t Rank : {item['rank']}")
 
-    def display_player_information(self):
-        player_query = Query()
-        player_fullname = input("Enter player fullname to get his/her information: ").title()
-        query_result = database.table("players").search(player_query.fullname == player_fullname)
+    def display_player_information(self, players_table, player_query):
+        """
+        Display player information for a specific player from user entry
+        :param players_table: refers to the player tab in the database
+        :param player_query: refers to TinyDB Query
+        :return: print player information
+        """
+        player_fullname = input(
+            "Enter player fullname to get his/her information: "
+        ).title()
+        query_result = players_table.search(player_query.fullname == player_fullname)
         if query_result:
             for item in query_result:
-                print(f"\nFullname: {item['fullname']}\n"
-                      f"Birth Date: {item['birth_date']}\n"
-                      f"Gender: {item['gender']}\n"
-                      f"Rank: {item['rank']}\n")
+                print(
+                    f"\nFullname: {item['fullname']}\n"
+                    f"Birth Date: {item['birth_date']}\n"
+                    f"Gender: {item['gender']}\n"
+                    f"Rank: {item['rank']}\n"
+                )
         else:
             print("Sorry, the fullname you enter doesn't exist in the database")
 
-    def display_all_tournaments_database(self):
-        print("----- LIST OF ALL TOURNAMENTS IN THE DATABASE -----")
-        print(f"There are {len(database.table('tournaments'))} tournaments in the database:")
-        for item in database.table("tournaments"):
-            print(f"Name: {item['name']} - Located in {item['location']} - {item['date']}")
+    def back_to_menu(self):
+        """ Ask user to go back to the menu """
+        back_to_menu = input(
+            "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
+        ).lower()
+        return back_to_menu
 
-    def display_tournament_information(self):
-        tournament_query = Query()
-        tournament_name = input("Enter tournament name to get more information: ").title()
-        query_result = database.table("tournaments").search(tournament_query.name == tournament_name)
+
+class ViewMainMenuTournament:
+    """
+    View specific to tournament option in the main menu (add a tournament to the database, display list of tournaments,..)
+    """
+    def __init__(self):
+        self.tournament_infos = {}
+        self.should_save_tournament = ""
+
+    def get_tournament_info(self):
+        """
+        Ask user for tournament information
+        :return: dict of tournament information
+        """
+        name = input("enter name of the tournament: ").title()
+        location = input("enter location of the tournament: ").title()
+
+        is_date = ""
+        date = ""
+        while not is_date:
+            try:
+                date = input("enter date of the tournament (DD/MM/YYYY): ")
+                date = datetime.strptime(date, "%d/%m/%Y")
+                is_date = True
+            except ValueError as message_error:
+                print(f"*{date}* is not a date format.")
+                print(message_error)
+        date = str(date)
+
+        time_control = ""
+        is_time_control = ""
+        while not is_time_control:
+            time_control = input(
+                "enter time control of the tournament (bullet / blitz / coup rapide): "
+            ).lower()
+            if time_control == "bullet" or time_control == "blitz" or time_control == "coup rapide":
+                is_time_control = True
+            else:
+                print("Please enter 'bullet' or 'blitz' or 'coup rapide': ")
+                is_time_control = False
+
+        description = input("enter description of the tournament: ")
+
+        self.tournament_infos = {
+            "name": name,
+            "location": location,
+            "date": date,
+            "time_control": time_control,
+            "description": description,
+        }
+        return self.tournament_infos
+
+    def should_save_tournament(self):
+        """ Ask confirmation to save tournament information to the database"""
+        self.should_save_tournament = input(
+            "Would you like to SAVE the tournament in the database ? Enter 'yes' or 'no': "
+        ).lower()
+        return self.should_save_tournament
+
+    def display_all_tournaments(self, tournaments_table):
+        """
+        Display list of all tournaments saved in the database
+        :param tournaments_table: refers to tournament tab from the database
+        :return: print a list of all tournaments
+        """
+        print("----- LIST OF ALL TOURNAMENTS IN THE DATABASE -----")
+        print(f"There are {len(tournaments_table)} tournaments in the database:")
+        for item in tournaments_table:
+            print(
+                f"Name: {item['name']} - Located in {item['location']} - {item['date']}"
+            )
+
+    def display_tournament_information(self, tournaments_table, tournament_query):
+        """
+        Display tournament information for a specific tournament from user entry
+        :param tournaments_table: refers to the tournament tab in the database
+        :param tournament_query: refers to TinyDB query
+        :return: print tournament information
+        """
+        tournament_name = input(
+            "Enter tournament name to get more information: "
+        ).title()
+        query_result = tournaments_table.search(
+            tournament_query.name == tournament_name
+        )
         if query_result:
             for item in query_result:
-                print(f"\nName: {item['name']}\n"
-                      f"Location: {item['location']}\n"
-                      f"Date: {item['date']}\n"
-                      f"Rounds: {item['rounds']}\n"
-                      f"Players: {item['players']}\n"
-                      f"Time Control: {item['time control']}\n"
-                      f"Description: {item['description']}\n")
+                print(
+                    f"\nName: {item['name']}\n"
+                    f"Location: {item['location']}\n"
+                    f"Date: {item['date']}\n"
+                    f"Rounds: {item['rounds']}\n"
+                    f"Players: {item['players']}\n"
+                    f"Time Control: {item['time control']}\n"
+                    f"Description: {item['description']}\n"
+                )
         else:
             print("Sorry, the name you enter doesn't exist in the database")
+
+    def back_to_menu(self):
+        """ Ask user to go back to the menu """
+        back_to_menu = input(
+            "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
+        ).lower()
+        return back_to_menu
+
+
+class ViewMainMenuTournamentTracker:
+    def __init__(self):
+        self.tournament_info = {}
+        self.player_info = {}
+        self.player_id = ""
+
+    def get_tournament_name(self, tournaments_table, tournament_query):
+        """
+        Ask user the name of the tournament to track
+        :param tournaments_table: refers to tournaments tabs in the database
+        :param tournament_query: refers to TinyDB query
+        :return: tournament information from the database
+        """
+        is_in_database = ""
+        while not is_in_database:
+            tournament_selection = input("Which tournament would you like to track ?: ").title()
+            query_result = tournaments_table.get(tournament_query.name == tournament_selection)
+            if query_result is None:
+                is_in_database = False
+                print("Sorry, the name you enter doesn't exist in the database")
+            else:
+                self.tournament_info = query_result
+                is_in_database = True
+
+    def display_tournament_tracker_menu(self):
+        """
+        Display a menu with specific options for one tournament
+        :return: print Tournament Tracker Menu
+        """
+        print(
+            "--------------------------------------------------\n"
+            "---------- WELCOME TO TOURNAMENT TRACKER ---------\n"
+            "--------------------------------------------------\n"
+            "--------------------- PLAYERS --------------------\n"
+            "enter 'p' : Add a player to the tournament\n"
+            "enter 'pl' : Display list of players\n"
+            "enter 'pr' : Modify the rank of a player\n"
+        )
+        print("--------------------- ROUNDS --------------------")
+        for round in range(self.tournament_info["rounds"]):
+            round += 1
+            print(
+                f"enter 'r{round}' : Display Round {round}\n"
+                f"enter 'sr{round}' : Enter score of Round {round}"
+            )
+        print(
+            "------------------- GET RESULTS ------------------\n"
+            "enter 'results' : Get results of the tournament\n"
+            "--------------------- REPORTS --------------------\n"
+            "enter 'r' : TO DEFINE\n"
+            "enter 'r' : TO DEFINE\n"
+            "--------------------------------------------------\n"
+            "Press 'q' to QUIT"
+        )
+        user_action = input("What is you selection ?: ")
+        return user_action
+
+    def get_player_to_add_to_tournament(self, players_table, player_query):
+        """
+
+        :param players_table:
+        :param player_query:
+        :return:
+        """
+        fullname = input("Enter player fullname to add it to the tournament: ").title()
+
+        player_id = players_table.get(player_query.fullname == fullname).doc_id
+        self.tournament_info["players"].append(player_id)
+        self.player_id = player_id
+        player_info = players_table.get(player_query.fullname == fullname)
+        self.player_info = player_info
+
+    def confirm_save_player_to_tournament(self):
+        print(f"Player {self.player_info['fullname']} - ID {self.player_id} has been added to the tournament")
+
+    def back_to_tracker_menu(self):
+        """ Ask user to go back to the menu """
+        back_to_menu = input(
+            "Would you like to GO BACK to the TOURNAMENT TRACKER MENU? Enter 'yes' or 'no': "
+        ).lower()
+        return back_to_menu
