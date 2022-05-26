@@ -6,6 +6,7 @@ class ViewMainMenu:
     """
     Main view that display the menu options
     """
+
     def __init__(self):
         pass
 
@@ -51,9 +52,10 @@ class ViewMainMenuPlayer:
     """
     View specific to player options in the main menu (add a player to the database, display list of players,..)
     """
+
     def __init__(self):
-        self.player_infos = {}
-        self.should_save_player = ""
+        self.player_info = {}
+        self.save_player = ""
 
     def get_player_info(self):
         """
@@ -64,6 +66,7 @@ class ViewMainMenuPlayer:
         last_name = input("enter player last name: ").title()
 
         is_gender = ""
+        gender = ""
         while not is_gender:
             gender = input("enter player gender (male/female): ").lower()
             if gender == "male" or gender == "female":
@@ -94,21 +97,21 @@ class ViewMainMenuPlayer:
                 print(f"*{rank}* is not an integer.")
                 print(message_error)
 
-        self.player_infos = {
+        self.player_info = {
             "first_name": first_name,
             "last_name": last_name,
             "birth_date": birth_date,
             "gender": gender,
             "rank": rank,
         }
-        return self.player_infos
+        return self.player_info
 
     def should_save_player(self):
         """ Ask confirmation to save player information to the database"""
-        self.should_save_player = input(
+        self.save_player = input(
             "Would you like to SAVE the player in the database ? Enter 'yes' or 'no': "
         ).lower()
-        return self.should_save_player
+        return self.save_player
 
     def display_all_players(self, players_table):
         """
@@ -155,9 +158,10 @@ class ViewMainMenuTournament:
     """
     View specific to tournament option in the main menu (add a tournament to the database, display list of tournaments,..)
     """
+
     def __init__(self):
         self.tournament_infos = {}
-        self.should_save_tournament = ""
+        self.save_tournament = ""
 
     def get_tournament_info(self):
         """
@@ -185,7 +189,11 @@ class ViewMainMenuTournament:
             time_control = input(
                 "enter time control of the tournament (bullet / blitz / coup rapide): "
             ).lower()
-            if time_control == "bullet" or time_control == "blitz" or time_control == "coup rapide":
+            if (
+                time_control == "bullet"
+                or time_control == "blitz"
+                or time_control == "coup rapide"
+            ):
                 is_time_control = True
             else:
                 print("Please enter 'bullet' or 'blitz' or 'coup rapide': ")
@@ -204,10 +212,10 @@ class ViewMainMenuTournament:
 
     def should_save_tournament(self):
         """ Ask confirmation to save tournament information to the database"""
-        self.should_save_tournament = input(
+        self.save_tournament = input(
             "Would you like to SAVE the tournament in the database ? Enter 'yes' or 'no': "
         ).lower()
-        return self.should_save_tournament
+        return self.save_tournament
 
     def display_all_tournaments(self, tournaments_table):
         """
@@ -257,84 +265,3 @@ class ViewMainMenuTournament:
         return back_to_menu
 
 
-class ViewMainMenuTournamentTracker:
-    def __init__(self):
-        self.tournament_info = {}
-        self.player_info = {}
-        self.player_id = ""
-
-    def get_tournament_name(self, tournaments_table, tournament_query):
-        """
-        Ask user the name of the tournament to track
-        :param tournaments_table: refers to tournaments tabs in the database
-        :param tournament_query: refers to TinyDB query
-        :return: tournament information from the database
-        """
-        is_in_database = ""
-        while not is_in_database:
-            tournament_selection = input("Which tournament would you like to track ?: ").title()
-            query_result = tournaments_table.get(tournament_query.name == tournament_selection)
-            if query_result is None:
-                is_in_database = False
-                print("Sorry, the name you enter doesn't exist in the database")
-            else:
-                self.tournament_info = query_result
-                is_in_database = True
-
-    def display_tournament_tracker_menu(self):
-        """
-        Display a menu with specific options for one tournament
-        :return: print Tournament Tracker Menu
-        """
-        print(
-            "--------------------------------------------------\n"
-            "---------- WELCOME TO TOURNAMENT TRACKER ---------\n"
-            "--------------------------------------------------\n"
-            "--------------------- PLAYERS --------------------\n"
-            "enter 'p' : Add a player to the tournament\n"
-            "enter 'pl' : Display list of players\n"
-            "enter 'pr' : Modify the rank of a player\n"
-        )
-        print("--------------------- ROUNDS --------------------")
-        for round in range(self.tournament_info["rounds"]):
-            round += 1
-            print(
-                f"enter 'r{round}' : Display Round {round}\n"
-                f"enter 'sr{round}' : Enter score of Round {round}"
-            )
-        print(
-            "------------------- GET RESULTS ------------------\n"
-            "enter 'results' : Get results of the tournament\n"
-            "--------------------- REPORTS --------------------\n"
-            "enter 'r' : TO DEFINE\n"
-            "enter 'r' : TO DEFINE\n"
-            "--------------------------------------------------\n"
-            "Press 'q' to QUIT"
-        )
-        user_action = input("What is you selection ?: ")
-        return user_action
-
-    def get_player_to_add_to_tournament(self, players_table, player_query):
-        """
-
-        :param players_table:
-        :param player_query:
-        :return:
-        """
-        fullname = input("Enter player fullname to add it to the tournament: ").title()
-
-        player_id = players_table.get(player_query.fullname == fullname).doc_id
-        self.tournament_info["players"].append(player_id)
-        self.player_id = player_id
-        player_info = players_table.get(player_query.fullname == fullname)
-        self.player_info = player_info
-
-    def confirm_save_player_to_tournament(self):
-        print(f"Player {self.player_info['fullname']} - ID {self.player_id} has been added to the tournament")
-
-    def back_to_tracker_menu(self):
-        """ Ask user to go back to the menu """
-        back_to_menu = input(
-            "Would you like to GO BACK to the TOURNAMENT TRACKER MENU? Enter 'yes' or 'no': "
-        ).lower()
-        return back_to_menu
