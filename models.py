@@ -3,7 +3,6 @@ from tinydb import TinyDB, Query
 
 class DatabaseChessGame:
     """Class DatabaseChessGame refers to the database file linked to the program"""
-
     def __init__(self):
         self.database = TinyDB("database.json")
         self.players_table = self.database.table("players")
@@ -12,8 +11,7 @@ class DatabaseChessGame:
         self.tournament_query = Query()
 
     def reset_database(self, confirm_reset):
-        """
-        Delete all information in the database after asking user confirmation
+        """Delete all information in the database after asking user confirmation
         :param confirm_reset: str 'yes' or 'no'
         :return: deletion of the database
         """
@@ -25,13 +23,8 @@ class DatabaseChessGame:
 
 
 class Player:
-    """
-    Player object can be added to a tournament object.
-    """
-
-    def __init__(
-        self, first_name="", last_name="", birth_date="", gender="", rank=0, score=""
-    ):
+    """Player object can be added to a tournament object."""
+    def __init__(self, first_name="", last_name="", birth_date="", gender="", rank=0, score=""):
         self.first_name = first_name
         self.last_name = last_name
         self.fullname = first_name + " " + last_name
@@ -49,7 +42,6 @@ class Player:
 
     def save_to_database(self, players_table):
         """ Save player information to the JSON database file
-
         :parameter
         should_save_player: str 'yes' or 'no'
         players_table: refers to player tab in database
@@ -83,9 +75,7 @@ class Player:
         print(f"Fullname: {query_result['fullname']} - Rank: {query_result['rank']}")
 
     def modify_rank(self, players_table, player_query):
-        players_table.update(
-            {"rank": self.rank}, player_query.fullname == self.fullname
-        )
+        players_table.update({"rank": self.rank}, player_query.fullname == self.fullname)
 
     def get_player_index(self, player_fullname, players_table, player_query):
         player_id = players_table.get(player_query.fullname == player_fullname).doc_id
@@ -93,21 +83,8 @@ class Player:
 
 
 class Tournament:
-    """
-    Tournament object
-    """
-
-    def __init__(
-        self,
-        name="",
-        location="",
-        date="",
-        players=[],
-        rounds=4,
-        rounds_list="blitz",
-        time_control="",
-        description="",
-    ):
+    """Tournament object"""
+    def __init__(self, name="", location="", date="", players=[], rounds=4, rounds_list="", time_control="", description=""):
         self.name = name
         self.location = location
         self.date = date
@@ -125,8 +102,7 @@ class Tournament:
         )
 
     def save_to_database(self, tournaments_table):
-        """
-        Save tournament information to the JSON database file
+        """Save tournament information to the JSON database file
         :param should_save_tournament: 'yes' or 'no'
         :param tournaments_table: refers to tournament tab in database
         :return:
@@ -147,7 +123,6 @@ class Tournament:
 
     def search_by_name(self, tournament_name, tournament_table, tournament_query):
         query_result = tournament_table.get(tournament_query.name == tournament_name)
-
         self.name = query_result["name"]
         self.location = query_result["location"]
         self.date = query_result["date"]
@@ -158,15 +133,12 @@ class Tournament:
         self.description = query_result["description"]
         return query_result
 
-    def update_tournament_players(self, tournaments_table, tournament_query):
+    def update_tournament_players(self, players_list, tournament_name, tournaments_table, tournament_query):
         """Add a player to the tournament"""
-        tournaments_table.update(
-            {"players": self.players}, tournament_query.name == self.name
-        )
+        tournaments_table.update({"players": players_list}, tournament_query.name == tournament_name)
 
-    def remove_player_to_tournament(
-        self, player_id, tournaments_table, tournament_query
-    ):
+    def remove_player_to_tournament(self, player_id, tournaments_table, tournament_query):
+        """Remove player to the tournament"""
         tournaments_table.remove(tournament_query.players == player_id)
 
 

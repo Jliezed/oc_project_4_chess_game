@@ -3,10 +3,7 @@ from datetime import datetime
 
 
 class ViewMainMenu:
-    """
-    Main view that display the menu options
-    """
-
+    """Main view that display the menu options"""
     def __init__(self):
         pass
 
@@ -35,16 +32,12 @@ class ViewMainMenu:
 
     def back_to_menu(self):
         """ Ask user to go back to the menu """
-        back_to_menu = input(
-            "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
-        ).lower()
+        back_to_menu = input("Would you like to GO BACK to the MENU? Enter 'yes' or 'no': ").lower()
         return back_to_menu
 
     def confirm_reset(self):
         """ Ask user confirmation before to reset the database """
-        confirm_reset = input(
-            "Are you sure you want to reset the database ? Enter 'yes' or 'no': "
-        ).lower()
+        confirm_reset = input("Are you sure you want to reset the database ? Enter 'yes' or 'no': ").lower()
         return confirm_reset
 
 
@@ -58,8 +51,7 @@ class ViewMainMenuPlayer:
         self.save_player = ""
 
     def get_player_info(self):
-        """
-        Ask user for player information
+        """Ask user for player information
         :return: dict of player information
         """
         first_name = input("enter player first name: ").title()
@@ -100,6 +92,7 @@ class ViewMainMenuPlayer:
         self.player_info = {
             "first_name": first_name,
             "last_name": last_name,
+            "fullname": first_name + " " + last_name,
             "birth_date": birth_date,
             "gender": gender,
             "rank": rank,
@@ -108,14 +101,11 @@ class ViewMainMenuPlayer:
 
     def should_save_player(self):
         """ Ask confirmation to save player information to the database"""
-        self.save_player = input(
-            "Would you like to SAVE the player in the database ? Enter 'yes' or 'no': "
-        ).lower()
+        self.save_player = input( "Would you like to SAVE the player in the database ? Enter 'yes' or 'no': ").lower()
         return self.save_player
 
     def display_all_players(self, players_table):
-        """
-        Display list of all players saved in the database
+        """Display list of all players saved in the database
         :param players_table: refers to the player tab in the database
         :return: print list of all players in the database
         """
@@ -125,15 +115,12 @@ class ViewMainMenuPlayer:
             print(f"Fullname: {item['fullname']}\t -\t Rank : {item['rank']}")
 
     def display_player_information(self, players_table, player_query):
-        """
-        Display player information for a specific player from user entry
+        """Display player information for a specific player from user entry
         :param players_table: refers to the player tab in the database
         :param player_query: refers to TinyDB Query
         :return: print player information
         """
-        player_fullname = input(
-            "Enter player fullname to get his/her information: "
-        ).title()
+        player_fullname = input("Enter player fullname to get his/her information: ").title()
         query_result = players_table.search(player_query.fullname == player_fullname)
         if query_result:
             for item in query_result:
@@ -148,9 +135,7 @@ class ViewMainMenuPlayer:
 
     def back_to_menu(self):
         """ Ask user to go back to the menu """
-        back_to_menu = input(
-            "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
-        ).lower()
+        back_to_menu = input("Would you like to GO BACK to the MENU? Enter 'yes' or 'no': ").lower()
         return back_to_menu
 
 
@@ -218,8 +203,7 @@ class ViewMainMenuTournament:
         return self.save_tournament
 
     def display_all_tournaments(self, tournaments_table):
-        """
-        Display list of all tournaments saved in the database
+        """Display list of all tournaments saved in the database
         :param tournaments_table: refers to tournament tab from the database
         :return: print a list of all tournaments
         """
@@ -231,8 +215,7 @@ class ViewMainMenuTournament:
             )
 
     def display_tournament_information(self, tournaments_table, tournament_query):
-        """
-        Display tournament information for a specific tournament from user entry
+        """Display tournament information for a specific tournament from user entry
         :param tournaments_table: refers to the tournament tab in the database
         :param tournament_query: refers to TinyDB query
         :return: print tournament information

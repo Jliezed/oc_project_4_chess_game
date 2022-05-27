@@ -1,18 +1,12 @@
 from models import Player, Tournament, DatabaseChessGame
-from views.main_view import (
-    ViewMainMenu,
-    ViewMainMenuPlayer,
-    ViewMainMenuTournament)
+from views.main_view import (ViewMainMenu, ViewMainMenuPlayer, ViewMainMenuTournament)
 from controllers.tracker_controller import TournamentTrackerController
 from console import clear_console
 
 
 class MainController:
-    """
-    Controller class that run the program
-    """
-
-    def __init__(self,):
+    """Controller class that run the program"""
+    def __init__(self):
         """Initialize with models from models and views"""
         self.view_main_menu = ViewMainMenu()
         self.view_main_menu_player = ViewMainMenuPlayer()
@@ -27,6 +21,7 @@ class MainController:
     def start_program(self):
         back_to_menu = "yes"
         while back_to_menu == "yes":
+            self.view_main_menu.show_logo()
             self.view_main_menu.display_menu()
             self.get_user_action()
 
