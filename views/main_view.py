@@ -18,13 +18,14 @@ class ViewMainMenu:
             "enter 'p' : Add a player to the database\n"
             "enter 't' : Create a new Tournament\n"
             "-------------------- DATABASE --------------------\n"
-            "enter 'pl' : Display list of players\n"
+            "enter 'pl-a' : Display list of players by alphabet\n"
+            "enter 'pl-r' : Display list of players by rank\n"
             "enter 'pi' : Access player information\n"
             "enter 'tl' : Display list of tournaments\n"
             "enter 'ti' : Access tournament information\n"
             "--------------- TOURNAMENT TRACKER ---------------\n"
             "enter 'tt' : Track a tournament\n"
-            "-------------------- RESET --------------------\n"
+            "---------------------- RESET ---------------------\n"
             "enter 'reset' : Reset database\n"
             "--------------------------------------------------\n"
             "Press 'q' to QUIT"
@@ -77,7 +78,7 @@ class ViewMainMenuPlayer:
             except ValueError as message_error:
                 print(f"*{birth_date}* is not a date format.")
                 print(message_error)
-        birth_date = str(birth_date)
+        birth_date = birth_date.strftime("%d/%m/%Y")
 
         rank = 0
         is_int = ""
@@ -109,10 +110,10 @@ class ViewMainMenuPlayer:
         :param players_table: refers to the player tab in the database
         :return: print list of all players in the database
         """
-        print("----- LIST OF ALL PLAYERS IN THE DATABASE -----")
+        print("------ LIST OF ALL PLAYERS IN THE DATABASE ------")
         print(f"There are {len(players_table)} players in the database: ")
-        for item in players_table:
-            print(f"Fullname: {item['fullname']}\t -\t Rank : {item['rank']}")
+        for player in players_table:
+            print(f"Fullname: {player.fullname}\t -\t Rank : {player.rank}")
 
     def display_player_information(self, players_table, player_query):
         """Display player information for a specific player from user entry
@@ -149,8 +150,7 @@ class ViewMainMenuTournament:
         self.save_tournament = ""
 
     def get_tournament_info(self):
-        """
-        Ask user for tournament information
+        """Ask user for tournament information
         :return: dict of tournament information
         """
         name = input("enter name of the tournament: ").title()
@@ -166,7 +166,7 @@ class ViewMainMenuTournament:
             except ValueError as message_error:
                 print(f"*{date}* is not a date format.")
                 print(message_error)
-        date = str(date)
+        date = date.strftime("%d/%m/%Y")
 
         time_control = ""
         is_time_control = ""

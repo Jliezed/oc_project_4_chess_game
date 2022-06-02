@@ -1,7 +1,9 @@
-from models import Player, Tournament, DatabaseChessGame
+from models.player import Player
+from models.tournament import Tournament
+from models.database import DatabaseChessGame
 from views.main_view import (ViewMainMenu, ViewMainMenuPlayer, ViewMainMenuTournament)
 from controllers.tracker_controller import TournamentTrackerController
-from console import clear_console
+from models.console import clear_console
 
 
 class MainController:
@@ -11,12 +13,22 @@ class MainController:
         self.view_main_menu = ViewMainMenu()
         self.view_main_menu_player = ViewMainMenuPlayer()
         self.view_main_menu_tournament = ViewMainMenuTournament()
-        self.database_chess_game = DatabaseChessGame()
+        self.database = DatabaseChessGame()
+        self.players_table = self.database.players_table
         self.user_action = ""
 
     def get_user_action(self):
         """ Get user selection in the menu """
         self.user_action = input("What is you selection ?: ").lower()
+
+    def get_list_players_object(self):
+        players_fullname_list = [player["fullname"] for player in self.players_table]
+        players_object_list = []
+        for player_fullname in players_fullname_list:
+            player = Player()
+            player.search_by_fullname(player_fullname, self.players_table, self.database.player_query)
+            players_object_list.append(player)
+        return players_object_list
 
     def start_program(self):
         back_to_menu = "yes"
@@ -31,6 +43,7 @@ class MainController:
             # ------------------------------------------------
             # ------------------------------------------------
 
+            # ------------------------------------------------
             # User select 'p' to Add a player to the database
             # ------------------------------------------------
             if self.user_action == "p":
@@ -51,31 +64,48 @@ class MainController:
 
                 # Save player information to the database
                 if should_save_player == "yes":
-                    new_player.save_to_database(self.database_chess_game.players_table)
+                    new_player.save_to_database(self.database.players_table)
 
                 # Ask to go back to the main menu
                 self.view_main_menu_player.back_to_menu()
                 clear_console()
 
-            # User select 'pl' to Display list of all players
-            # -----------------------------------------------
-            elif self.user_action == "pl":
-                # Display all players saved in the database
-                self.view_main_menu_player.display_all_players(
-                    self.database_chess_game.players_table
-                )
+            # -------------------------------------------------------------
+            # User select 'pl-a' to Display list of all players by Alphabet
+            # -------------------------------------------------------------
+            elif self.user_action == "pl-a":
+                # Sort Players by alphabet
+                players_sorted_by_alphabet = self.get_list_players_object()
+                players_sorted_by_alphabet.sort(key=lambda player: player.fullname)
+                # Display All Players by Alphabet
+                self.view_main_menu_player.display_all_players(players_sorted_by_alphabet)
 
                 # Ask to go back to the main menu
                 self.view_main_menu_player.back_to_menu()
                 clear_console()
 
+            # ---------------------------------------------------------
+            # User select 'pl-r' to Display list of all players by Rank
+            # ---------------------------------------------------------
+            elif self.user_action == "pl-r":
+                # Sort Players by Rank
+                players_sorted_by_rank = self.get_list_players_object()
+                players_sorted_by_rank.sort(key=lambda player: player.rank)
+                # Display All Players by Rank
+                self.view_main_menu_player.display_all_players(players_sorted_by_rank)
+
+                # Ask to go back to the main menu
+                self.view_main_menu_player.back_to_menu()
+                clear_console()
+
+            # ----------------------------------------------
             # User select 'pi' to Display player information
             # ----------------------------------------------
             elif self.user_action == "pi":
                 # Display player information for a specific player from user entry
                 self.view_main_menu_player.display_player_information(
-                    self.database_chess_game.players_table,
-                    self.database_chess_game.player_query,
+                    self.database.players_table,
+                    self.database.player_query,
                 )
 
                 # Ask to go back to the main menu
@@ -88,6 +118,7 @@ class MainController:
             # ---------------------------------------------------
             # ---------------------------------------------------
 
+            # ---------------------------------------------------
             # User select 't' to Add a tournament to the database
             # ---------------------------------------------------
             elif self.user_action == "t":
@@ -111,50 +142,64 @@ class MainController:
                 # Save tournament information to the database
                 if should_save_tournament == "yes":
                     new_tournament.save_to_database(
-                        self.database_chess_game.tournaments_table
+                        self.database.tournaments_table
                     )
 
                 # Ask to go back to the main menu
                 self.view_main_menu_tournament.back_to_menu()
                 clear_console()
 
+            # ---------------------------------------------------
             # User select 'tl' to Display list of all tournaments
             # ---------------------------------------------------
             elif self.user_action == "tl":
                 # Display all tournaments saved in the database
                 self.view_main_menu_tournament.display_all_tournaments(
-                    self.database_chess_game.tournaments_table
+                    self.database.tournaments_table
                 )
 
                 # Ask to go back to the main menu
                 self.view_main_menu_tournament.back_to_menu()
                 clear_console()
 
+            # --------------------------------------------------
             # User select 'ti' to Display tournament information
             # --------------------------------------------------
             elif self.user_action == "ti":
                 # Display tournament information
                 self.view_main_menu_tournament.display_tournament_information(
-                    self.database_chess_game.tournaments_table,
-                    self.database_chess_game.tournament_query,
+                    self.database.tournaments_table,
+                    self.database.tournament_query,
                 )
 
                 # Ask to go back to the main menu
                 self.view_main_menu_tournament.back_to_menu()
                 clear_console()
 
-            # ---------------------------- RESET --------------------------
+            # -------------------------------------------------------------
+            # -------------------------------------------------------------
+            # --------------------------- RESET ---------------------------
+            # -------------------------------------------------------------
+            # -------------------------------------------------------------
+
+            # -------------------------------------------------------------
             # User select 'reset' to delete all information in the database
+            # -------------------------------------------------------------
             elif self.user_action == "reset":
                 confirm_reset = self.view_main_menu.confirm_reset()
-                self.database_chess_game.reset_database(confirm_reset)
+                self.database.reset_database(confirm_reset)
 
                 # Ask to go back to the main menu
                 self.view_main_menu.back_to_menu()
                 clear_console()
 
+            # -------------------------------------------------------------
+            # -------------------------------------------------------------
             # --------------------- TOURNAMENT TRACKER --------------------
+            # -------------------------------------------------------------
+            # -------------------------------------------------------------
             elif self.user_action == "tt":
+                clear_console()
                 tournament_tracker_menu = TournamentTrackerController()
                 tournament_tracker_menu.start_menu()
 
