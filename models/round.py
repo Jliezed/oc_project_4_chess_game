@@ -27,11 +27,11 @@ class Round:
         self.matches = matches
         return self.matches
 
-    def round_to_dict(self, round_obj):
+    def round_to_dict(self):
         round_dict = {
-            "name": round_obj.name,
-            "start_date": round_obj.start_date,
-            "end_date": round_obj.end_date,
-            "matches": round_obj.matches,
+            "name": self.name,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "matches": self.matches,
         }
         return round_dict

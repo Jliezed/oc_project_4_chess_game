@@ -11,6 +11,7 @@ class Tournament:
         self.rounds = rounds
         self.time_control = time_control
         self.description = description
+        self.result = []
 
     def __repr__(self):
         """ Better representation of a tournament instance"""
@@ -60,7 +61,6 @@ class Tournament:
         return self.players
 
 
-
     def save_rounds_to_database(self, round_to_save, tournament_name, tournaments_table, tournament_query):
         tournaments_table.update({"rounds": round_to_save}, tournament_query.name == tournament_name)
         return self.rounds
@@ -70,20 +70,13 @@ class Tournament:
         rounds_list = tournament_info["rounds"]
         return rounds_list
 
-    def insert_round_to_tournament(self, round_to_insert):
-        """Add a round to the tournament"""
-        rounds_name = [round for round in self.rounds]
-        print(rounds_name)
-        if round_to_insert.name in rounds_name:
-            print("Already exist")
-        else:
-            self.rounds = round_to_insert
-            print(self.rounds)
-            #rounds_list[round_to_insert.name] = round_to_insert
-        return self.rounds
+    def is_round_in_tournament(self, round_to_check, rounds_list):
+        rounds_names_list = []
+        for r in rounds_list:
+            round_name = r["name"]
+            rounds_names_list.append(round_name)
 
-    def insert_round_to_tournament_method_2(self, round_to_insert):
-        """Add a round to the tournament"""
-        list_of_rounds = self.rounds
-        list_of_rounds.append(round_to_insert)
-        self.rounds = list_of_rounds
+        if round_to_check in rounds_names_list:
+            return True
+        else:
+            return False

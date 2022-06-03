@@ -1,14 +1,16 @@
 class Player:
     """Player object can be added to a tournament object."""
-    def __init__(self, first_name="", last_name="", birth_date="", gender="", rank=0, score=0, position=""):
+    def __init__(self, first_name="", last_name="", birth_date="", gender="", rank=0, score=0, position="", opponents = []):
         self.first_name = first_name
         self.last_name = last_name
         self.fullname = first_name + " " + last_name
         self.birth_date = birth_date
         self.gender = gender
         self.rank = rank
+
         self.score = score
         self.position = position
+        self.opponents = opponents
 
     # def __repr__(self):
     #     """ Better representation of a player instance"""
@@ -16,7 +18,6 @@ class Player:
     #         f"ID: {self.position} - Player : {self.fullname} - "
     #         f"born in {self.birth_date} - {self.gender} - rank: {self.rank}"
     #     )
-
 
     def save_to_database(self, players_table):
         """ Save player information to the JSON database file
@@ -30,7 +31,8 @@ class Player:
             "birth_date": self.birth_date,
             "gender": self.gender,
             "rank": self.rank,
-            "current_score": self.score,
+            "cumul_score": self.score,
+            "opponents": self.opponents,
         }
         players_table.insert(player)
         return print(f"Player *{self.fullname}* has been added to the database")
@@ -49,6 +51,8 @@ class Player:
         self.gender = query_result["gender"]
         self.rank = query_result["rank"]
         self.position = index_player
+        self.score = query_result["cumul_score"]
+        self.opponents = query_result["opponents"]
         return query_result
 
     def search_by_fullname(self, player_fullname, players_table, player_query):
@@ -65,6 +69,8 @@ class Player:
         self.birth_date = query_result["birth_date"]
         self.gender = query_result["gender"]
         self.rank = query_result["rank"]
+        self.score = query_result["cumul_score"]
+        self.opponents = query_result["opponents"]
         return query_result
 
     def get_player_index(self, player_fullname, players_table, player_query):
@@ -86,3 +92,7 @@ class Player:
         """
         players_table.update({"rank": self.rank}, player_query.fullname == self.fullname)
         return self.rank
+
+    def update_player_score_opponents(self, players_table, player_query):
+        players_table.update({"cumul_score": self.score}, player_query.fullname == self.fullname)
+        players_table.update({"opponents": self.opponents}, player_query.fullname == self.fullname)

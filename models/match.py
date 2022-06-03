@@ -7,7 +7,7 @@ class Match:
         self.score_a = score_a
         self.player_b = player_b
         self.score_b = score_b
-        self.players_match = f"Match : *id: {self.player_a.position} - {self.player_a.fullname}* VERSUS *id: {self.player_b.position} - {self.player_b.fullname}*"
+        self.players_match = [self.player_a, self.player_b]
         self.players_scores = self.display_players_score()
 
     # def __repr__(self):
@@ -38,3 +38,4 @@ class Match:
     def display_players_score(self):
         self.players_scores = ([self.player_a.position, self.score_a], [self.player_b.position, self.score_b])
         return self.players_scores
+

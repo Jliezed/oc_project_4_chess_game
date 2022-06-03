@@ -9,8 +9,7 @@ class ViewMainMenuTournamentTracker:
     # Get tournament name and display menu
     # ------------------------------------
     def get_tournament_name(self, tournaments_table, tournament_query):
-        """
-        Ask user the name of the tournament to track
+        """Ask user the name of the tournament to track
         :param tournaments_table: refers to tournaments tabs in the database
         :param tournament_query: refers to TinyDB query
         :return: tournament information from the database
@@ -65,8 +64,8 @@ class ViewMainMenuTournamentTracker:
                 "---------------------- GET RESULTS --------------------\n"
                 "enter 'results' : Get results of the tournament\n"
                 "------------------------ REPORTS ----------------------\n"
-                "enter 'r' : TO DEFINE\n"
-                "enter 'r' : TO DEFINE\n"
+                "enter 'dr' : Display all rounds of the tournament\n"
+                "enter 'dm' : Display all matches of the tournament\n"
                 "-------------------------------------------------------\n"
                 "Press 'q' to QUIT"
             )
