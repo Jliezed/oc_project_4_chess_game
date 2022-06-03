@@ -59,6 +59,17 @@ class Tournament:
         tournaments_table.remove(tournament_query.players == player_id)
         return self.players
 
+
+
+    def save_rounds_to_database(self, round_to_save, tournament_name, tournaments_table, tournament_query):
+        tournaments_table.update({"rounds": round_to_save}, tournament_query.name == tournament_name)
+        return self.rounds
+
+    def get_rounds_from_database(self, tournament_name, tournaments_table, tournament_query):
+        tournament_info = tournaments_table.get(tournament_query.name == tournament_name)
+        rounds_list = tournament_info["rounds"]
+        return rounds_list
+
     def insert_round_to_tournament(self, round_to_insert):
         """Add a round to the tournament"""
         rounds_name = [round for round in self.rounds]
@@ -71,12 +82,8 @@ class Tournament:
             #rounds_list[round_to_insert.name] = round_to_insert
         return self.rounds
 
-    def save_rounds_to_database(self, round_to_save, tournament_name, tournaments_table, tournament_query):
-        round = {
-            "name": round_to_save.name,
-            "start_date": round_to_save.start_date,
-            "end_date": round_to_save.end_date,
-            "matches": round_to_save.matches,
-        }
-        tournaments_table.update({"rounds": round}, tournament_query.name == tournament_name)
-
+    def insert_round_to_tournament_method_2(self, round_to_insert):
+        """Add a round to the tournament"""
+        list_of_rounds = self.rounds
+        list_of_rounds.append(round_to_insert)
+        self.rounds = list_of_rounds

@@ -1,6 +1,6 @@
 class Player:
     """Player object can be added to a tournament object."""
-    def __init__(self, first_name="", last_name="", birth_date="", gender="", rank=0, score="", index=""):
+    def __init__(self, first_name="", last_name="", birth_date="", gender="", rank=0, score=0, position=""):
         self.first_name = first_name
         self.last_name = last_name
         self.fullname = first_name + " " + last_name
@@ -8,14 +8,15 @@ class Player:
         self.gender = gender
         self.rank = rank
         self.score = score
-        self.index = index
+        self.position = position
 
-    def __repr__(self):
-        """ Better representation of a player instance"""
-        return (
-            f"ID: {self.index} - Player : {self.fullname} - "
-            f"born in {self.birth_date} - {self.gender} - rank: {self.rank}"
-        )
+    # def __repr__(self):
+    #     """ Better representation of a player instance"""
+    #     return (
+    #         f"ID: {self.position} - Player : {self.fullname} - "
+    #         f"born in {self.birth_date} - {self.gender} - rank: {self.rank}"
+    #     )
+
 
     def save_to_database(self, players_table):
         """ Save player information to the JSON database file
@@ -47,7 +48,7 @@ class Player:
         self.birth_date = query_result["birth_date"]
         self.gender = query_result["gender"]
         self.rank = query_result["rank"]
-        self.index = index_player
+        self.position = index_player
         return query_result
 
     def search_by_fullname(self, player_fullname, players_table, player_query):
@@ -74,7 +75,7 @@ class Player:
         :return: the index in the database of the player
         """
         player_id = players_table.get(player_query.fullname == player_fullname).doc_id
-        self.index = player_id
+        self.position = player_id
         return player_id
 
     def modify_rank(self, players_table, player_query):
