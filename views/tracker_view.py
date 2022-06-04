@@ -1,6 +1,3 @@
-from models.tournament import Tournament
-
-
 class ViewMainMenuTournamentTracker:
     def __init__(self):
         self.tournament_info = {}
@@ -26,8 +23,7 @@ class ViewMainMenuTournamentTracker:
                 return query_result["name"]
 
     def display_tracker_menu(self, tournament):
-        """
-        Display a menu with specific options for one tournament
+        """Display a menu with specific options for one tournament
         :return: print Tournament Tracker Menu
         """
         if len(tournament.players) < 8:
@@ -124,7 +120,6 @@ class ViewMainMenuTournamentTracker:
         ).lower()
         return confirmation
 
-
     # ------------
     # BACK TO MENU
     # ------------
@@ -135,12 +130,12 @@ class ViewMainMenuTournamentTracker:
         ).lower()
         return back_to_menu
 
-    # ------------
+    # -----------------------------
     # DISPLAY PLAYERS OF TOURNAMENT
-    # ------------
+    # -----------------------------
     def display_all_players(self, players_in_tournament):
         """Display list of all players saved in the database
-        :param players_table: refers to the player tab in the database
+        :param: players_table: refers to the player tab in the database
         :return: print list of all players in the database
         """
         print(

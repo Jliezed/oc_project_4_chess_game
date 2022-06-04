@@ -1,5 +1,3 @@
-import json
-
 class Tournament:
     """Tournament object"""
     def __init__(self, name="", location="", date="", players=[], nb_rounds=4, rounds=[], time_control="", description=""):
@@ -59,7 +57,6 @@ class Tournament:
         """Remove player to the tournament"""
         tournaments_table.remove(tournament_query.players == player_id)
         return self.players
-
 
     def save_rounds_to_database(self, round_to_save, tournament_name, tournaments_table, tournament_query):
         tournaments_table.update({"rounds": round_to_save}, tournament_query.name == tournament_name)

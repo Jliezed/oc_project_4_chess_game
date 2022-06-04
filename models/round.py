@@ -1,5 +1,5 @@
-from models.match import Match
 from datetime import datetime
+
 
 class Round:
     def __init__(self, name="", start_date="", end_date=""):

@@ -23,6 +23,7 @@ class TournamentTrackerController:
         """Generate a list of Players Object from Players' IDs
         :return: List of players object
         """
+        self.players_object_list = []
         list_players = self.tournament_to_track.players
         for player_id in list_players:
             player_to_sort = Player()
@@ -65,23 +66,20 @@ class TournamentTrackerController:
         """Sort players by score then by rank
         :return: print results
         """
-        # Sort Players by Score
-        self.players_object_list.sort(key=lambda player: player.score, reverse=True)
-        # Then sort by Rank
-        self.players_object_list.sort(key=lambda player: player.rank)
+        # Sort Players by Score and Rank
+        self.players_object_list.sort(key=lambda player: (-player.score, player.rank))
         for player in self.players_object_list:
             print(f"{player.fullname} - score: {player.score} - rank {player.rank}")
 
     def generate_next_round_matches(self):
-        copy_players_object_list = self.players_object_list[:]
         players_in_matches = []
         matches_next_round = []
 
-        for player in copy_players_object_list:
+        for player in self.players_object_list:
             if player not in players_in_matches:
                 # Get next player
-                next_player_index = copy_players_object_list.index(player) + 1
-                next_player = copy_players_object_list[next_player_index]
+                next_player_index = self.players_object_list.index(player) + 1
+                next_player = self.players_object_list[next_player_index]
                 # Append to players in match
                 players_in_matches.append(player)
                 players_in_matches.append(next_player)
@@ -95,9 +93,7 @@ class TournamentTrackerController:
                 pass
         return matches_next_round
 
-    def player_opponents(self):
-        pass
-
+    # ----------------------------------------------------------------------
     # User select 'tt' to Access to other options specific to one tournament
     # ----------------------------------------------------------------------
     def start_menu(self):
@@ -305,14 +301,6 @@ class TournamentTrackerController:
                         self.database.tournament_query,
                     )
 
-
-
-
-
-
-
-
-
             # -------------------------------------------------------
             # User select 'record' to start recording matches results
             # -------------------------------------------------------
@@ -360,65 +348,56 @@ class TournamentTrackerController:
                 # ------------
                 # NEXT ROUND
                 # ------------
-                # Check if round 2 is in the rounds list gets from the database
-                is_round_in_tournament = self.tournament_to_track.is_round_in_tournament("Round 2", rounds_list)
-                if not is_round_in_tournament:
-                    print("-----> ROUND 2 -----> LIST OF MATCHES ----->")
-                    self.sort_players_by_score_rank()
-                    matches_second_round = self.generate_next_round_matches()
-                    # Create Round
-                    round_2 = Round(name="Round 2")
-                    round_2.define_start_date()
-                    # Enter Score for every pair of matches
-                    print("-----> ROUND 2 -----> ENTER SCORE ----->")
-                    matches_recorded = self.enter_score_round(matches_second_round)
-                    # Ask user confirmation before save matches to round
-                    confirmation = self.view_main_menu_tracker.confirm_save_round_1_score()
+                # Check if Round is in the rounds list gets from the database
+                rounds_names = [f"Round {n}" for n in range(2, 5)]
+                for round_name in rounds_names:
+                    is_round_in_tournament = self.tournament_to_track.is_round_in_tournament(round_name, rounds_list)
+                    if not is_round_in_tournament:
+                        print(f"-----> {round_name} -----> LIST OF MATCHES ----->")
+                        self.sort_players_by_score_rank()
+                        matches_second_round = self.generate_next_round_matches()
+                        # Create Round
+                        new_round = Round(name=round_name)
+                        new_round.define_start_date()
+                        # Enter Score for every pair of matches
+                        print(f"-----> {round_name} -----> ENTER SCORE ----->")
+                        matches_recorded = self.enter_score_round(matches_second_round)
+                        # Ask user confirmation before save matches to round
+                        confirmation = self.view_main_menu_tracker.confirm_save_round_1_score()
 
-                    if confirmation == "yes":
-                        # Save matches to the round
-                        round_2.insert_matches(matches_recorded)
-                        print(f"Round 2 : {round_2}")
-                        rounds_list = self.tournament_to_track.get_rounds_from_database(
-                            self.tournament_to_track.name,
-                            self.tournaments_table,
-                            self.database.tournament_query
-                        )
-                        rounds_list.append(round_2.round_to_dict())
-                        self.tournament_to_track.save_rounds_to_database(
-                            rounds_list,
-                            self.tournament_to_track.name,
-                            self.tournaments_table,
-                            self.database.tournament_query
-                        )
-                        # Save players in tournament
-                        for player in self.players_object_list:
-                            player.update_player_score_opponents(self.players_table, self.database.player_query)
-                    else:
-                        pass
+                        if confirmation == "yes":
+                            # Save matches to the round
+                            new_round.insert_matches(matches_recorded)
+                            print(f"{round_name} : {new_round}")
+                            rounds_list = self.tournament_to_track.get_rounds_from_database(
+                                self.tournament_to_track.name,
+                                self.tournaments_table,
+                                self.database.tournament_query
+                            )
+                            rounds_list.append(new_round.round_to_dict())
+                            self.tournament_to_track.save_rounds_to_database(
+                                rounds_list,
+                                self.tournament_to_track.name,
+                                self.tournaments_table,
+                                self.database.tournament_query
+                            )
 
-                # Ask to go back to the menu tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
-                clear_console()
+                            # Save players in tournament
+                            for player in self.players_object_list:
+                                player.update_player_score_opponents(self.players_table, self.database.player_query)
 
-
-
-            # -------------------------------------------------------------
-            # -------------------------------------------------------------
-            # Enter 'test'
-            # -------------------------------------------------------------
-            # -------------------------------------------------------------
-            elif user_action_tracker == "test":
-                pass
-
-
-
-
+                            # REFRESH PLAYERS OBJECTS
+                            self.get_players_object_list()
+                        else:
+                            pass
 
                 # Ask to go back to the menu tracker
                 self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
+                # Ask to go back to the menu tracker
+                self.view_main_menu_tracker.back_to_tracker_menu()
+                clear_console()
 
             else:
                 print("sorry your selection doesn't exist")
