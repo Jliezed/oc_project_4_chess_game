@@ -72,7 +72,6 @@ class Tournament:
         for r in rounds_list:
             round_name = r["name"]
             rounds_names_list.append(round_name)
-
         if round_to_check in rounds_names_list:
             return True
         else:

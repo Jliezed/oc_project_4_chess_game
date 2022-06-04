@@ -16,12 +16,15 @@ class Round:
 
     def define_start_date(self):
         if self.start_date == "":
-            today = datetime.now().strftime("%d/%m/%Y")
-            self.start_date = today
+            self.start_date = datetime.now().strftime("%d/%m/%Y %H:%M")
             return self.start_date
         else:
-            self.start_date = datetime.now()
+            self.start_date = datetime.now().strftime("%d/%m/%Y %H:%M")
             return self.start_date
+
+    def define_end_date(self):
+        self.end_date = datetime.now().strftime("%d/%m/%Y %H:%M")
+        return self.end_date
 
     def insert_matches(self, matches):
         self.matches = matches

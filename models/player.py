@@ -96,3 +96,7 @@ class Player:
     def update_player_score_opponents(self, players_table, player_query):
         players_table.update({"cumul_score": self.score}, player_query.fullname == self.fullname)
         players_table.update({"opponents": self.opponents}, player_query.fullname == self.fullname)
+
+    def reset_score_opponents(self, players_table, player_query):
+        players_table.update({"cumul_score": 0}, player_query.fullname == self.fullname)
+        players_table.update({"opponents": []}, player_query.fullname == self.fullname)
