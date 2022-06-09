@@ -1,20 +1,24 @@
 from models.player import Player
 from models.tournament import Tournament
 from models.database import DatabaseChessGame
-from views.main_view import (ViewMainMenu, ViewMainMenuPlayer, ViewMainMenuTournament)
+from views.main_view import ViewMainMenu, ViewMainMenuPlayer, ViewMainMenuTournament
 from controllers.tracker_controller import TournamentTrackerController
 from models.console import clear_console
 
 
 class MainController:
     """Controller class that run the program"""
+
     def __init__(self):
         """Initialize with models from models and views"""
         self.view_main_menu = ViewMainMenu()
         self.view_main_menu_player = ViewMainMenuPlayer()
         self.view_main_menu_tournament = ViewMainMenuTournament()
         self.database = DatabaseChessGame()
+        self.tournaments_table = self.database.tournaments_table
         self.players_table = self.database.players_table
+        self.tournament_query = self.database.tournament_query
+        self.player_query = self.database.player_query
         self.user_action = ""
 
     def get_user_action(self):
@@ -26,7 +30,9 @@ class MainController:
         players_object_list = []
         for player_fullname in players_fullname_list:
             player = Player()
-            player.search_by_fullname(player_fullname, self.players_table, self.database.player_query)
+            player.search_by_fullname(
+                player_fullname, self.players_table, self.player_query
+            )
             players_object_list.append(player)
         return players_object_list
 
@@ -64,30 +70,32 @@ class MainController:
 
                 # Save player information to the database
                 if should_save_player == "yes":
-                    new_player.save_to_database(self.database.players_table)
+                    new_player.save_to_database(self.players_table)
 
                 # Ask to go back to the main menu
                 self.view_main_menu_player.back_to_menu()
                 clear_console()
 
             # -------------------------------------------------------------
-            # User select 'pl-a' to Display list of all players by Alphabet
+            # User select 'pla' to Display list of all players by Alphabet
             # -------------------------------------------------------------
-            elif self.user_action == "pl-a":
+            elif self.user_action == "pla":
                 # Sort Players by alphabet
                 players_sorted_by_alphabet = self.get_list_players_object()
                 players_sorted_by_alphabet.sort(key=lambda player: player.fullname)
                 # Display All Players by Alphabet
-                self.view_main_menu_player.display_all_players(players_sorted_by_alphabet)
+                self.view_main_menu_player.display_all_players(
+                    players_sorted_by_alphabet
+                )
 
                 # Ask to go back to the main menu
                 self.view_main_menu_player.back_to_menu()
                 clear_console()
 
             # ---------------------------------------------------------
-            # User select 'pl-r' to Display list of all players by Rank
+            # User select 'plr' to Display list of all players by Rank
             # ---------------------------------------------------------
-            elif self.user_action == "pl-r":
+            elif self.user_action == "plr":
                 # Sort Players by Rank
                 players_sorted_by_rank = self.get_list_players_object()
                 players_sorted_by_rank.sort(key=lambda player: player.rank)
@@ -104,8 +112,7 @@ class MainController:
             elif self.user_action == "pi":
                 # Display player information for a specific player from user entry
                 self.view_main_menu_player.display_player_information(
-                    self.database.players_table,
-                    self.database.player_query,
+                    self.players_table, self.player_query,
                 )
 
                 # Ask to go back to the main menu
@@ -141,9 +148,7 @@ class MainController:
 
                 # Save tournament information to the database
                 if should_save_tournament == "yes":
-                    new_tournament.save_to_database(
-                        self.database.tournaments_table
-                    )
+                    new_tournament.save_to_database(self.tournaments_table)
 
                 # Ask to go back to the main menu
                 self.view_main_menu_tournament.back_to_menu()
@@ -155,7 +160,7 @@ class MainController:
             elif self.user_action == "tl":
                 # Display all tournaments saved in the database
                 self.view_main_menu_tournament.display_all_tournaments(
-                    self.database.tournaments_table
+                    self.tournaments_table
                 )
 
                 # Ask to go back to the main menu
@@ -168,8 +173,7 @@ class MainController:
             elif self.user_action == "ti":
                 # Display tournament information
                 self.view_main_menu_tournament.display_tournament_information(
-                    self.database.tournaments_table,
-                    self.database.tournament_query,
+                    self.tournaments_table, self.tournament_query,
                 )
 
                 # Ask to go back to the main menu
@@ -203,9 +207,13 @@ class MainController:
                 tournament_tracker_menu = TournamentTrackerController()
                 tournament_tracker_menu.start_menu()
 
+            # -------------------------------------------------------------
+            # User select 'q' to quit
+            # -------------------------------------------------------------
+            elif self.user_action == "q":
+                exit()
+
             else:
                 # Ask to go back to the main menu
                 self.view_main_menu.back_to_menu()
                 clear_console()
-
-

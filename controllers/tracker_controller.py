@@ -6,7 +6,6 @@ from models.player import Player
 from views.tracker_view import ViewMainMenuTournamentTracker
 from models.console import clear_console
 
-
 class TournamentTrackerController:
     def __init__(self,):
         """Initialize with models from models and views"""
@@ -16,6 +15,9 @@ class TournamentTrackerController:
         self.tournaments_table = self.database.tournaments_table
         self.rounds_table = self.database.rounds_table
         self.matches_table = self.database.matches_table
+        self.tournament_query = self.database.tournament_query
+        self.player_query = self.database.player_query
+
         self.tournament_to_track = Tournament()
         self.players_object_list = []
 
@@ -26,9 +28,9 @@ class TournamentTrackerController:
         self.players_object_list = []
         list_players = self.tournament_to_track.players
         for player_id in list_players:
-            player_to_sort = Player()
-            player_to_sort.search_by_index(player_id, self.players_table)
-            self.players_object_list.append(player_to_sort)
+            player = Player()
+            player.search_by_index(player_id, self.players_table)
+            self.players_object_list.append(player)
         return self.players_object_list
 
     def generate_first_round_matches(self, players_object_list):
@@ -45,8 +47,8 @@ class TournamentTrackerController:
             match.display_match()
             matches_first_round.append(match)
 
-            player_first_set.opponents.append(player_second_set.position)
-            player_second_set.opponents.append(player_first_set.position)
+            player_first_set.opponents.append(player_second_set.id_database)
+            player_second_set.opponents.append(player_first_set.id_database)
         return matches_first_round
 
     def enter_score_round(self, matches):
@@ -67,9 +69,9 @@ class TournamentTrackerController:
         :return: print results
         """
         # Sort Players by Score and Rank
-        self.players_object_list.sort(key=lambda player: (-player.score, player.rank))
+        self.players_object_list.sort(key=lambda player: (-player.cumul_score, player.rank))
         for player in self.players_object_list:
-            print(f"{player.fullname} - score: {player.score} - rank {player.rank}")
+            print(f"{player.fullname} - score: {player.cumul_score} - rank {player.rank}")
 
     def generate_next_round_matches(self):
         players_in_matches = []
@@ -87,8 +89,8 @@ class TournamentTrackerController:
                 match.display_match()
                 matches_next_round.append(match)
 
-                player.opponents.append(next_player.position)
-                next_player.opponents.append(player.position)
+                player.opponents.append(next_player.id_database)
+                next_player.opponents.append(player.id_database)
             else:
                 pass
         return matches_next_round
@@ -99,16 +101,21 @@ class TournamentTrackerController:
     def start_menu(self):
         # Ask user the name of the tournament to track
         tournament_name = self.view_main_menu_tracker.get_tournament_name(
-            self.tournaments_table, self.database.tournament_query
+            self.tournaments_table, self.tournament_query
         )
 
         # Retrieve tournament information
         self.tournament_to_track.search_by_name(
-            tournament_name, self.tournaments_table, self.database.tournament_query
+            tournament_name, self.tournaments_table, self.tournament_query
         )
 
         # Initiate Players Object list
         self.get_players_object_list()
+
+        # Reset Players Scores & Opponents
+        for player in self.players_object_list:
+            player.reset_score_opponents(self.players_table, self.player_query)
+
 
         back_to_menu = "yes"
         while back_to_menu == "yes":
@@ -130,12 +137,12 @@ class TournamentTrackerController:
                 player_to_add = Player()
                 try:
                     player_to_add.search_by_fullname(
-                        player_fullname, self.players_table, self.database.player_query
+                        player_fullname, self.players_table, self.player_query
                     )
                     player_id = player_to_add.get_player_index(
                         player_to_add.fullname,
                         self.players_table,
-                        self.database.player_query,
+                        self.player_query,
                     )
 
                     # Get Tournament players list and check if already in the list
@@ -143,7 +150,8 @@ class TournamentTrackerController:
 
                     if len(players_list) == 8:
                         print(
-                            "Sorry, you can't add more than 8 players to a tournament. Please remove a player "
+                            "Sorry, you can't add more than 8 players to a tournament. "
+                            "Please remove a player "
                             "if you still want to add another player."
                         )
                     elif player_id in players_list:
@@ -158,7 +166,7 @@ class TournamentTrackerController:
                                 players_list,
                                 self.tournament_to_track.name,
                                 self.tournaments_table,
-                                self.database.tournament_query,
+                                self.tournament_query,
                             )
                             print(
                                 f"{player_to_add.fullname} has been added to the tournament"
@@ -171,11 +179,11 @@ class TournamentTrackerController:
                 clear_console()
 
             # ----------------------------------------------------------------------
-            # User select 'lp-a' to display players in the tournament sort by Alphabet
+            # User select 'lpa' to display players in the tournament sort by Alphabet
             # ---------------------------------------------------------------------
-            elif user_action_tracker == "lp-a":
+            elif user_action_tracker == "lpa":
                 # Sort Players by alphabet
-                players_sorted_by_alphabet = self.players_object_list
+                players_sorted_by_alphabet = self.get_players_object_list()
                 players_sorted_by_alphabet.sort(key=lambda player: player.fullname)
                 self.view_main_menu_tracker.display_all_players(
                     players_sorted_by_alphabet
@@ -186,11 +194,11 @@ class TournamentTrackerController:
                 clear_console()
 
             # ----------------------------------------------------------------------
-            # User select 'lp-r' to display players in the tournament sort by Alphabet
+            # User select 'lpr' to display players in the tournament sort by Alphabet
             # ---------------------------------------------------------------------
-            elif user_action_tracker == "lp-r":
+            elif user_action_tracker == "lpr":
                 # Sort Players by alphabet
-                players_sorted_by_rank = self.players_object_list
+                players_sorted_by_rank = self.get_players_object_list()
                 players_sorted_by_rank.sort(key=lambda player: player.rank)
                 self.view_main_menu_tracker.display_all_players(players_sorted_by_rank)
 
@@ -202,14 +210,16 @@ class TournamentTrackerController:
             # User select 'pr' to modify player rank
             # --------------------------------------
             elif user_action_tracker == "pr":
-                if self.tournament_to_track.rounds == "":
+                if self.tournament_to_track.rounds == []:
                     player_fullname = (
                         self.view_main_menu_tracker.get_player_fullname_to_change_rank()
                     )
                     player_to_change_rank = Player()
                     try:
                         player_to_change_rank.search_by_fullname(
-                            player_fullname, self.players_table, self.database.player_query,
+                            player_fullname,
+                            self.players_table,
+                            self.player_query,
                         )
 
                         is_number = ""
@@ -227,16 +237,19 @@ class TournamentTrackerController:
 
                         player_to_change_rank.rank = new_rank
                         player_to_change_rank.modify_rank(
-                            self.players_table, self.database.player_query
+                            self.players_table, self.player_query
                         )
                         print(
-                            f"{player_to_change_rank.fullname} has a new rank: {player_to_change_rank.rank}"
+                            f"{player_to_change_rank.fullname} has a new rank: "
+                            f"{player_to_change_rank.rank}"
                         )
                     except TypeError:
                         print("The player name doesn't exist in the database.")
                 else:
                     print(
-                        "Record has been started. You can't modify ranks of players. Please reset players if you still want to modify ranking")
+                        "Record has been started. You can't modify ranks of players. "
+                        "Please reset players if you still want to modify ranking"
+                    )
 
                 # Ask go back to Menu Tracker
                 self.view_main_menu_tracker.back_to_tracker_menu()
@@ -259,7 +272,7 @@ class TournamentTrackerController:
                     player_id = player_to_remove.get_player_index(
                         player_to_remove.fullname,
                         self.players_table,
-                        self.database.player_query,
+                        self.player_query,
                     )
 
                     # Get Tournament players list and check if already in the list
@@ -277,10 +290,11 @@ class TournamentTrackerController:
                                 players_list,
                                 self.tournament_to_track.name,
                                 self.tournaments_table,
-                                self.database.tournament_query,
+                                self.tournament_query,
                             )
                             print(
-                                f"{player_to_remove.fullname} has been removed to the tournament"
+                                f"{player_to_remove.fullname} has been removed to the "
+                                f"tournament"
                             )
                 except TypeError:
                     print("The player name doesn't exist in the database.")
@@ -303,8 +317,8 @@ class TournamentTrackerController:
                     self.tournament_to_track.update_tournament_players(
                         players_list,
                         self.tournament_to_track.name,
-                        self.database.tournaments_table,
-                        self.database.tournament_query,
+                        self.tournaments_table,
+                        self.tournament_query,
                     )
 
             # -------------------------------------------------------
@@ -314,6 +328,9 @@ class TournamentTrackerController:
                 # -----------
                 # FIRST ROUND
                 # -----------
+
+                # Initialize save Players Rank, Score & Opponents
+
 
                 # Get rounds from database
                 rounds_list = self.tournament_to_track.get_rounds_from_database(
@@ -353,15 +370,49 @@ class TournamentTrackerController:
                             self.tournaments_table,
                             self.database.tournament_query,
                         )
+
                         # Save players in tournament database
+                        players_details = []
                         for player in self.players_object_list:
                             player.update_player_score_opponents(
                                 self.players_table, self.database.player_query
                             )
 
+                            player_details = player.player_details_to_dict()
+                            players_details.append(player_details)
+
+                        self.tournament_to_track.save_player_details_to_database(
+                            players_details, self.tournament_to_track.name,
+                            self.tournaments_table, self.tournament_query)
+
                 # ------------
                 # NEXT ROUND
                 # ------------
+                # UPDATE RANK, SCORE, OPPONENTS FROM PLAYERS DETAIL
+                # Get players details of the tournament from the Database
+                players_details = self.tournament_to_track.get_players_details_from_detabase(
+                    self.tournament_to_track.name,
+                    self.tournaments_table,
+                    self.database.tournament_query,
+                )
+
+                for player in players_details:
+                    player_data = Player()
+                    player_data.search_by_index(player["id_database"],
+                                                self.players_table)
+                    # Retrieve Rank, Score and Opponents
+                    player_data.rank = player["rank"]
+                    player_data.cumul_score = player["cumul_score"]
+                    player_data.opponents = player["opponents"]
+                    # Update the database
+                    player_data.update_player_rank_score_opponents(
+                        self.players_table, self.player_query)
+
+                # Re-initiate Players List Object
+                self.get_players_object_list()
+
+
+
                 # Check if Round is in the rounds list gets from the database
                 rounds_names = [f"Round {n}" for n in range(2, 5)]
                 for round_name in rounds_names:
@@ -401,10 +452,18 @@ class TournamentTrackerController:
                             )
 
                             # Save players in tournament
+                            players_details = []
                             for player in self.players_object_list:
                                 player.update_player_score_opponents(
                                     self.players_table, self.database.player_query
                                 )
+
+                                player_details = player.player_details_to_dict()
+                                players_details.append(player_details)
+
+                            self.tournament_to_track.save_player_details_to_database(
+                                players_details, self.tournament_to_track.name,
+                                self.tournaments_table, self.tournament_query)
 
                             # REFRESH PLAYERS OBJECTS
                             self.get_players_object_list()
@@ -448,14 +507,17 @@ class TournamentTrackerController:
                 cumul_results.sort(key=lambda result: -result[1])
 
                 # Display final results for each player
+                print("----- TOURNAMENT RANKING -----")
                 for result in cumul_results:
                     id_player = result[0]
                     scores_player = result[1]
                     player_result = Player()
                     player_result.search_by_index(id_player, self.players_table)
-                    if cumul_results.index(result) == 0:
-                        print(f"The Winner of the Tournament is: {player_result.fullname.upper()}")
-                        print("----- TOURNAMENT RANKING -----")
+                    if cumul_results.index(result) == 0 and scores_player > 0:
+                        print(
+                            f"The Winner of the Tournament is: {player_result.fullname.upper()}"
+                        )
+
                     print(f"{player_result.fullname} - Score: {scores_player}")
 
                 # Ask to go back to the menu tracker
@@ -466,12 +528,31 @@ class TournamentTrackerController:
             # User select 'dr' to display all rounds of the tournament
             # -------------------------------------------------------------
             elif user_action_tracker == "dr":
-                pass
+                self.tournament_to_track.display_rounds(
+                    self.tournament_to_track.name, self.tournaments_table,
+                    self.tournament_query)
 
                 # Ask to go back to the menu tracker
                 self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
+            # -------------------------------------------------------------
+            # User select 'dm' to display all matches of the tournament
+            # -------------------------------------------------------------
+            elif user_action_tracker == "dm":
+                self.tournament_to_track.display_matches(self.tournament_to_track.name,
+                                                         self.tournaments_table,
+                                                         self.tournament_query)
+
+                # Ask to go back to the menu tracker
+                self.view_main_menu_tracker.back_to_tracker_menu()
+                clear_console()
+
+            # -------------------------------------------------------------
+            # User select 'q' to quit
+            # -------------------------------------------------------------
+            elif user_action_tracker == "q":
+                exit()
 
             # -------------------------------------------------------------
             # User select 'test' to display tournament results

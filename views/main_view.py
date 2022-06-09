@@ -4,6 +4,7 @@ from datetime import datetime
 
 class ViewMainMenu:
     """Main view that display the menu options"""
+
     def __init__(self):
         pass
 
@@ -18,8 +19,8 @@ class ViewMainMenu:
             "enter 'p' : Add a player to the database\n"
             "enter 't' : Create a new Tournament\n"
             "-------------------- DATABASE --------------------\n"
-            "enter 'pl-a' : Display list of players by alphabet\n"
-            "enter 'pl-r' : Display list of players by rank\n"
+            "enter 'pla' : Display list of players by alphabet\n"
+            "enter 'plr' : Display list of players by rank\n"
             "enter 'pi' : Access player information\n"
             "enter 'tl' : Display list of tournaments\n"
             "enter 'ti' : Access tournament information\n"
@@ -33,12 +34,19 @@ class ViewMainMenu:
 
     def back_to_menu(self):
         """ Ask user to go back to the menu """
-        back_to_menu = input("Would you like to GO BACK to the MENU? Enter 'yes' or 'no': ").lower()
+        back_to_menu = input(
+            "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
+        ).lower()
         return back_to_menu
 
+    # -------------------------------------------------------------
+    # User select 'reset' to delete all information in the database
+    # -------------------------------------------------------------
     def confirm_reset(self):
         """ Ask user confirmation before to reset the database """
-        confirm_reset = input("Are you sure you want to reset the database ? Enter 'yes' or 'no': ").lower()
+        confirm_reset = input(
+            "Are you sure you want to reset the database ? Enter 'yes' or 'no': "
+        ).lower()
         return confirm_reset
 
 
@@ -51,6 +59,9 @@ class ViewMainMenuPlayer:
         self.player_info = {}
         self.save_player = ""
 
+    # ------------------------------------------------
+    # User select 'p' to Add a player to the database
+    # ------------------------------------------------
     def get_player_info(self):
         """Ask user for player information
         :return: dict of player information
@@ -102,9 +113,17 @@ class ViewMainMenuPlayer:
 
     def should_save_player(self):
         """ Ask confirmation to save player information to the database"""
-        self.save_player = input( "Would you like to SAVE the player in the database ? Enter 'yes' or 'no': ").lower()
+        self.save_player = input(
+            "Would you like to SAVE the player in the database ? Enter 'yes' or 'no': "
+        ).lower()
         return self.save_player
 
+    # -------------------------------------------------------------
+    # User select 'pla' to Display list of all players by Alphabet
+    # -------------------------------------------------------------
+    # ---------------------------------------------------------
+    # User select 'plr' to Display list of all players by Rank
+    # ---------------------------------------------------------
     def display_all_players(self, players_table):
         """Display list of all players saved in the database
         :param players_table: refers to the player tab in the database
@@ -115,13 +134,18 @@ class ViewMainMenuPlayer:
         for player in players_table:
             print(f"Fullname: {player.fullname}\t -\t Rank : {player.rank}")
 
+    # ----------------------------------------------
+    # User select 'pi' to Display player information
+    # ----------------------------------------------
     def display_player_information(self, players_table, player_query):
         """Display player information for a specific player from user entry
         :param players_table: refers to the player tab in the database
         :param player_query: refers to TinyDB Query
         :return: print player information
         """
-        player_fullname = input("Enter player fullname to get his/her information: ").title()
+        player_fullname = input(
+            "Enter player fullname to get his/her information: "
+        ).title()
         query_result = players_table.search(player_query.fullname == player_fullname)
         if query_result:
             for item in query_result:
@@ -136,7 +160,9 @@ class ViewMainMenuPlayer:
 
     def back_to_menu(self):
         """ Ask user to go back to the menu """
-        back_to_menu = input("Would you like to GO BACK to the MENU? Enter 'yes' or 'no': ").lower()
+        back_to_menu = input(
+            "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
+        ).lower()
         return back_to_menu
 
 
@@ -149,6 +175,9 @@ class ViewMainMenuTournament:
         self.tournament_infos = {}
         self.save_tournament = ""
 
+    # ---------------------------------------------------
+    # User select 't' to Add a tournament to the database
+    # ---------------------------------------------------
     def get_tournament_info(self):
         """Ask user for tournament information
         :return: dict of tournament information
@@ -202,6 +231,9 @@ class ViewMainMenuTournament:
         ).lower()
         return self.save_tournament
 
+    # ---------------------------------------------------
+    # User select 'tl' to Display list of all tournaments
+    # ---------------------------------------------------
     def display_all_tournaments(self, tournaments_table):
         """Display list of all tournaments saved in the database
         :param tournaments_table: refers to tournament tab from the database
@@ -214,6 +246,9 @@ class ViewMainMenuTournament:
                 f"Name: {item['name']} - Located in {item['location']} - {item['date']}"
             )
 
+    # --------------------------------------------------
+    # User select 'ti' to Display tournament information
+    # --------------------------------------------------
     def display_tournament_information(self, tournaments_table, tournament_query):
         """Display tournament information for a specific tournament from user entry
         :param tournaments_table: refers to the tournament tab in the database
@@ -234,6 +269,7 @@ class ViewMainMenuTournament:
                     f"Date: {item['date']}\n"
                     f"Rounds: {item['rounds']}\n"
                     f"Players: {item['players']}\n"
+                    f"Players Details: {item['players_details']}\n"
                     f"Time Control: {item['time control']}\n"
                     f"Description: {item['description']}\n"
                 )
@@ -246,5 +282,3 @@ class ViewMainMenuTournament:
             "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
         ).lower()
         return back_to_menu
-
-

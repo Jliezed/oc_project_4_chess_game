@@ -13,8 +13,12 @@ class ViewMainMenuTournamentTracker:
         """
         in_database = ""
         while not in_database:
-            tournament_selection = input("Which tournament would you like to track ?: ").title()
-            query_result = tournaments_table.get(tournament_query.name == tournament_selection)
+            tournament_selection = input(
+                "Which tournament would you like to track ?: "
+            ).title()
+            query_result = tournaments_table.get(
+                tournament_query.name == tournament_selection
+            )
             if query_result is None:
                 in_database = False
                 print("Sorry, the name you enter doesn't exist in the database")
@@ -33,8 +37,8 @@ class ViewMainMenuTournamentTracker:
                 "-----------------------------------------------------------\n"
                 "------------------------ PLAYERS ---------------------------\n"
                 "enter 'a' : Add a player to the tournament\n"
-                "enter 'lp-a' : Display list of players sort by Alphabet\n"
-                "enter 'lp-r' : Display list of players sort by Rank\n"
+                "enter 'lpa' : Display list of players sort by Alphabet\n"
+                "enter 'lpr' : Display list of players sort by Rank\n"
                 "enter 'pr' : Modify the rank of a player\n"
                 "enter 'rp' : Remove a player to the tournament\n"
                 "-----------------------------------------------------------\n"
@@ -47,15 +51,16 @@ class ViewMainMenuTournamentTracker:
                 "------------ WELCOME TO TOURNAMENT TRACKER ------------\n"
                 "-------------------------------------------------------\n"
                 "------------------------ PLAYERS ----------------------\n"
-                "enter 'lp-a' : Display list of players sort by Alphabet\n"
-                "enter 'lp-r' : Display list of players sort by Rank\n"
+                "enter 'lpa' : Display list of players sort by Alphabet\n"
+                "enter 'lpr' : Display list of players sort by Rank\n"
                 "enter 'pr' : Modify the rank of a player\n"
                 "enter 'reset-p' : Reset players to this tournament\n"
                 "-------------------------------------------------------"
             )
-            print("--------------------- START ROUNDS --------------------\n"
-                  "enter 'record' : Record matches results"
-                  )
+            print(
+                "--------------------- START ROUNDS --------------------\n"
+                "enter 'record' : Record matches results"
+            )
             print(
                 "---------------------- GET RESULTS --------------------\n"
                 "enter 'results' : Get results of the tournament\n"
@@ -65,7 +70,7 @@ class ViewMainMenuTournamentTracker:
                 "-------------------------------------------------------\n"
                 "Press 'q' to QUIT"
             )
-        user_action = input("What is you selection ?: ")
+        user_action = input("What is your selection ?: ")
         return user_action
 
     # -------------------------------------------------
@@ -73,12 +78,15 @@ class ViewMainMenuTournamentTracker:
     # -------------------------------------------------
     def get_player_fullname_to_add(self):
         # Ask user the fullname of the player
-        player_fullname = input("Enter player fullname to add it to the tournament: ").title()
+        player_fullname = input(
+            "Enter player fullname to add it to the tournament: "
+        ).title()
         return player_fullname
 
     def confirm_add_player_to_tournament(self, player_id, player_fullname):
         confirmation = input(
-            f"Do you want to add {player_fullname} - ID : {player_id} to the tournament? Enter 'yes' or 'no': "
+            f"Do you want to add {player_fullname} - ID : {player_id} to the tournament?"
+            f" Enter 'yes' or 'no': "
         ).lower()
         return confirmation
 
@@ -86,19 +94,24 @@ class ViewMainMenuTournamentTracker:
     # User select 'pr' to modify player rank
     # --------------------------------------
     def get_player_fullname_to_change_rank(self):
-        player_fullname = input(f"Which player would you like to change the rank ? Enter his/her fullname: ").title()
+        player_fullname = input(
+            f"Which player would you like to change the rank ? Enter his/her fullname: "
+        ).title()
         return player_fullname
 
     # -------------------------------------------------------
     # User select 'pr' to remove a player from the tournament
     # -------------------------------------------------------
     def get_player_fullname_to_remove(self):
-        player_fullname = input(f"Enter player fullname to remove to the tournament: ").title()
+        player_fullname = input(
+            f"Enter player fullname to remove to the tournament: "
+        ).title()
         return player_fullname
 
     def confirm_remove_player_to_tournament(self, player_id, player_fullname):
         confirmation = input(
-            f"Do you want to remove {player_fullname} - ID : {player_id} to the tournament? Enter 'yes' or 'no': "
+            f"Do you want to remove {player_fullname} - ID : {player_id} to the tournament? "
+            f"Enter 'yes' or 'no': "
         ).lower()
         return confirmation
 
@@ -116,7 +129,8 @@ class ViewMainMenuTournamentTracker:
     # -------------------------------------------------------
     def confirm_save_round_1_score(self):
         confirmation = input(
-            f"Do you want to save the first round (you won't be able to modify scores afterwards) ? Enter 'yes' or 'no': "
+            f"Do you want to save the first round (you won't be able to modify scores afterwards) ? "
+            f"Enter 'yes' or 'no': "
         ).lower()
         return confirmation
 

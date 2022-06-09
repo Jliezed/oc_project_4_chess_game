@@ -1,15 +1,18 @@
 class Tournament:
     """Tournament object"""
-    def __init__(self, name="", location="", date="", players=[], nb_rounds=4, rounds=[], time_control="", description=""):
+
+    def __init__(self, name="", location="", date="", nb_rounds=4,
+                 time_control="", description=""):
         self.name = name
         self.location = location
         self.date = date
-        self.players = players
+        self.players = []
+        self.players_details = []
         self.nb_rounds = nb_rounds
-        self.rounds = rounds
+        self.rounds = []
         self.time_control = time_control
         self.description = description
-        self.result = []
+        self.results = []
 
     def __repr__(self):
         """ Better representation of a tournament instance"""
@@ -18,6 +21,9 @@ class Tournament:
             f"Players: {self.players} - nb rounds: {self.rounds} - Time control: {self.time_control}"
         )
 
+    # ---------------------------------------------------
+    # User select 't' to Add a tournament to the database
+    # ---------------------------------------------------
     def save_to_database(self, tournaments_table):
         """Save tournament information to the JSON database file
         :param tournaments_table: refers to tournament table in database
@@ -27,45 +33,59 @@ class Tournament:
             "name": self.name,
             "location": self.location,
             "date": self.date,
-            "nb_rounds": self.nb_rounds,
             "players": self.players,
+            "players_details": self.players_details,
+            "nb_rounds": self.nb_rounds,
             "rounds": self.rounds,
             "time control": self.time_control,
             "description": self.description,
+            "results": self.results,
         }
         tournaments_table.insert(tournament)
         return print(f"Tournament : {self.name} has been added to the database")
 
+    # ----------------------------------------------------------------------
+    # User select 'tt' to Access to other options specific to one tournament
+    # ----------------------------------------------------------------------
     def search_by_name(self, tournament_name, tournament_table, tournament_query):
         query_result = tournament_table.get(tournament_query.name == tournament_name)
         self.name = query_result["name"]
         self.location = query_result["location"]
         self.date = query_result["date"]
         self.players = query_result["players"]
+        self.players_details = query_result["players_details"]
         self.nb_rounds = query_result["nb_rounds"]
         self.rounds = query_result["rounds"]
         self.time_control = query_result["time control"]
         self.description = query_result["description"]
+        self.results = query_result["results"]
         return query_result
 
-    def update_tournament_players(self, players_list, tournament_name, tournaments_table, tournament_query):
+    # -------------------------------------------------
+    # COMMON :
+    # 'a' to Add a player to the tournament
+    # 'rp' to remove a player from the tournament
+    # 'reset-p' to remove all players to the tournament
+    # -------------------------------------------------
+    def update_tournament_players(
+        self, players_list, tournament_name, tournaments_table, tournament_query
+    ):
         """Add a player to the tournament"""
-        tournaments_table.update({"players": players_list}, tournament_query.name == tournament_name)
+        tournaments_table.update(
+            {"players": players_list}, tournament_query.name == tournament_name
+        )
         return self.players
 
-    def remove_player_to_tournament(self, player_id, tournaments_table, tournament_query):
-        """Remove player to the tournament"""
-        tournaments_table.remove(tournament_query.players == player_id)
-        return self.players
-
-    def save_rounds_to_database(self, round_to_save, tournament_name, tournaments_table, tournament_query):
-        tournaments_table.update({"rounds": round_to_save}, tournament_query.name == tournament_name)
+    # -------------------------------------------------------
+    # User select 'record' to start recording matches results
+    # -------------------------------------------------------
+    def save_rounds_to_database(
+        self, round_to_save, tournament_name, tournaments_table, tournament_query
+    ):
+        tournaments_table.update(
+            {"rounds": round_to_save}, tournament_query.name == tournament_name
+        )
         return self.rounds
-
-    def get_rounds_from_database(self, tournament_name, tournaments_table, tournament_query):
-        tournament_info = tournaments_table.get(tournament_query.name == tournament_name)
-        rounds_list = tournament_info["rounds"]
-        return rounds_list
 
     def is_round_in_tournament(self, round_to_check, rounds_list):
         rounds_names_list = []
@@ -76,3 +96,44 @@ class Tournament:
             return True
         else:
             return False
+
+    def save_player_details_to_database(self, players_details, tournament_name,
+                                        tournaments_table, tournament_query):
+        tournaments_table.update({"players_details": players_details},
+                                 tournament_query.name == tournament_name)
+        return self.players_details
+
+    # ---------------------------------------------------
+    # COMMON :
+    # 'record' to start recording matches results
+    # 'results' to display tournament results
+    # ---------------------------------------------------
+    def get_rounds_from_database(self, tournament_name, tournaments_table, tournament_query):
+        tournament_info = tournaments_table.get(
+            tournament_query.name == tournament_name
+        )
+        rounds_list = tournament_info["rounds"]
+        return rounds_list
+
+
+    def get_players_details_from_detabase(self, tournament_name, tournaments_table,
+                                          tournament_query):
+        tournament_info = tournaments_table.get(
+            tournament_query.name == tournament_name
+        )
+        players_details = tournament_info["players_details"]
+        return players_details
+
+
+    def display_rounds(self, tournament_name, tournaments_table, tournament_query):
+        tournament_info = tournaments_table.get(tournament_query.name == tournament_name)
+        rounds_list = tournament_info["rounds"]
+        return print(rounds_list)
+
+    def display_matches(self, tournament_name, tournaments_table, tournament_query):
+        tournament_info = tournaments_table.get(tournament_query.name == tournament_name)
+        rounds_list = tournament_info["rounds"]
+        for round in rounds_list:
+            round_name = round["name"]
+            matches = round["matches"]
+            print(round_name, matches)
