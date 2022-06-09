@@ -26,10 +26,6 @@ class Round:
         self.end_date = datetime.now().strftime("%d/%m/%Y %H:%M")
         return self.end_date
 
-    def insert_matches(self, matches):
-        self.matches = matches
-        return self.matches
-
     def round_to_dict(self):
         round_dict = {
             "name": self.name,

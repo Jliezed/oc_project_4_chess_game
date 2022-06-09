@@ -79,7 +79,7 @@ class Tournament:
     # -------------------------------------------------------
     # User select 'record' to start recording matches results
     # -------------------------------------------------------
-    def save_rounds_to_database(
+    def update_rounds_database(
         self, round_to_save, tournament_name, tournaments_table, tournament_query
     ):
         tournaments_table.update(
@@ -97,8 +97,8 @@ class Tournament:
         else:
             return False
 
-    def save_player_details_to_database(self, players_details, tournament_name,
-                                        tournaments_table, tournament_query):
+    def update_player_details_database(self, players_details, tournament_name,
+                                       tournaments_table, tournament_query):
         tournaments_table.update({"players_details": players_details},
                                  tournament_query.name == tournament_name)
         return self.players_details

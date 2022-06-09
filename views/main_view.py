@@ -1,4 +1,4 @@
-from arts import logo
+from models.arts import logo
 from datetime import datetime
 
 
@@ -52,7 +52,8 @@ class ViewMainMenu:
 
 class ViewMainMenuPlayer:
     """
-    View specific to player options in the main menu (add a player to the database, display list of players,..)
+    View specific to player options in the main menu (add a player to the database,
+    display list of players,..)
     """
 
     def __init__(self):
@@ -119,19 +120,18 @@ class ViewMainMenuPlayer:
         return self.save_player
 
     # -------------------------------------------------------------
-    # User select 'pla' to Display list of all players by Alphabet
-    # -------------------------------------------------------------
+    # COMMON:
+    # 'pla' to Display list of all players by Alphabet
+    # 'plr' to Display list of all players by Rank
     # ---------------------------------------------------------
-    # User select 'plr' to Display list of all players by Rank
-    # ---------------------------------------------------------
-    def display_all_players(self, players_table):
+    def display_all_players(self, players_obj):
         """Display list of all players saved in the database
-        :param players_table: refers to the player tab in the database
+        :param players_obj: refers to players objects list
         :return: print list of all players in the database
         """
         print("------ LIST OF ALL PLAYERS IN THE DATABASE ------")
-        print(f"There are {len(players_table)} players in the database: ")
-        for player in players_table:
+        print(f"There are {len(players_obj)} players in the database: ")
+        for player in players_obj:
             print(f"Fullname: {player.fullname}\t -\t Rank : {player.rank}")
 
     # ----------------------------------------------

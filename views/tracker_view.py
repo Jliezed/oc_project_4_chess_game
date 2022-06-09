@@ -158,3 +158,8 @@ class ViewMainMenuTournamentTracker:
         )
         for player in players_in_tournament:
             print(f"Fullname: {player.fullname}\t -\t Rank : {player.rank}")
+
+    def display_exit_record(self):
+        user_action = input("Enter 'exit' to end record and go back to the main menu."
+                            "").lower()
+        return user_action

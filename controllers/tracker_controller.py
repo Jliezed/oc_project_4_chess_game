@@ -6,6 +6,7 @@ from models.player import Player
 from views.tracker_view import ViewMainMenuTournamentTracker
 from models.console import clear_console
 
+
 class TournamentTrackerController:
     def __init__(self,):
         """Initialize with models from models and views"""
@@ -51,7 +52,7 @@ class TournamentTrackerController:
             player_second_set.opponents.append(player_first_set.id_database)
         return matches_first_round
 
-    def enter_score_round(self, matches):
+    def get_score_round(self, matches):
         """Ask user scores for each match in the list of matches
         :param matches: list of matches
         :return: list of matches with scores for each player in the match
@@ -81,10 +82,19 @@ class TournamentTrackerController:
             if player not in players_in_matches:
                 # Get next player
                 next_player_index = self.players_object_list.index(player) + 1
-                next_player = self.players_object_list[next_player_index]
+                next_next_player_index = self.players_object_list.index(player) + 2
+                if next_player_index in player.opponents:
+                    try:
+                        next_player = self.players_object_list[next_next_player_index]
+                    except IndexError:
+                        next_player = self.players_object_list[next_player_index]
+                else:
+                    next_player = self.players_object_list[next_player_index]
+
                 # Append to players in match
                 players_in_matches.append(player)
                 players_in_matches.append(next_player)
+
                 match = Match(player, next_player)
                 match.display_match()
                 matches_next_round.append(match)
@@ -112,11 +122,11 @@ class TournamentTrackerController:
         # Initiate Players Object list
         self.get_players_object_list()
 
-        # Reset Players Scores & Opponents
+        # Reset Players Attributes: Scores & Opponents
         for player in self.players_object_list:
             player.reset_score_opponents(self.players_table, self.player_query)
 
-
+        # Start Tournament Tracker Menu
         back_to_menu = "yes"
         while back_to_menu == "yes":
             # Get user selection in tournament tracker menu
@@ -124,6 +134,7 @@ class TournamentTrackerController:
                 self.tournament_to_track
             )
 
+            # -------------------------------------------------
             # -------------------- PLAYER ---------------------
             # -------------------------------------------------
             # User select 'a' to Add a player to the tournament
@@ -133,9 +144,10 @@ class TournamentTrackerController:
                 player_fullname = (
                     self.view_main_menu_tracker.get_player_fullname_to_add()
                 )
-                # Get ID of the player
+
                 player_to_add = Player()
                 try:
+                    # Search Player in the database and get the ID
                     player_to_add.search_by_fullname(
                         player_fullname, self.players_table, self.player_query
                     )
@@ -309,6 +321,8 @@ class TournamentTrackerController:
             elif user_action_tracker == "reset-p":
                 # Set players value to empty
                 players_list = []
+                players_details = []
+                rounds = []
                 # Confirm reset
                 confirmation = self.view_main_menu_tracker.confirm_reset_players_list()
 
@@ -320,7 +334,18 @@ class TournamentTrackerController:
                         self.tournaments_table,
                         self.tournament_query,
                     )
+                    # Update players details in the database
+                    self.tournament_to_track.update_player_details_database(
+                        players_details, self.tournament_to_track.name,
+                        self.tournaments_table, self.tournament_query)
+                    # Update rounds in the database
+                    self.tournament_to_track.update_rounds_database(
+                        rounds, self.tournament_to_track.name,
+                        self.tournaments_table, self.tournament_query)
 
+                # RESET TOURNAMENT INFO
+                self.tournament_to_track.search_by_name(
+                    self.tournament_to_track.name, self.tournaments_table, self.tournament_query)
             # -------------------------------------------------------
             # User select 'record' to start recording matches results
             # -------------------------------------------------------
@@ -328,10 +353,6 @@ class TournamentTrackerController:
                 # -----------
                 # FIRST ROUND
                 # -----------
-
-                # Initialize save Players Rank, Score & Opponents
-
-
                 # Get rounds from database
                 rounds_list = self.tournament_to_track.get_rounds_from_database(
                     self.tournament_to_track.name,
@@ -352,24 +373,24 @@ class TournamentTrackerController:
                     round_1.define_start_date()
                     # Enter Score for every pair of matches
                     print("-----> ROUND 1 -----> ENTER SCORE ----->")
-                    matches_recorded = self.enter_score_round(matches_first_round)
+                    matches_recorded = self.get_score_round(matches_first_round)
                     # Ask user confirmation before save matches to round
                     confirmation = (
                         self.view_main_menu_tracker.confirm_save_round_1_score()
                     )
                     if confirmation == "yes":
-                        round_1.define_end_date()
-                        round_1.insert_matches(matches_recorded)
+                        round_1.matches = matches_recorded
                         print(f"Round 1 : {round_1}")
-                        # Save matches in tournament database
+                        # Save round in tournament database
                         round_dict = round_1.round_to_dict()
                         rounds_list = [round_dict]
-                        self.tournament_to_track.save_rounds_to_database(
+                        self.tournament_to_track.update_rounds_database(
                             rounds_list,
                             self.tournament_to_track.name,
                             self.tournaments_table,
                             self.database.tournament_query,
                         )
+                        round_1.define_end_date()
 
                         # Save players in tournament database
                         players_details = []
@@ -381,14 +402,22 @@ class TournamentTrackerController:
                             player_details = player.player_details_to_dict()
                             players_details.append(player_details)
 
-                        self.tournament_to_track.save_player_details_to_database(
+                        self.tournament_to_track.update_player_details_database(
                             players_details, self.tournament_to_track.name,
                             self.tournaments_table, self.tournament_query)
+
+                        # Ask user to exit record
+                        exit_record = self.view_main_menu_tracker.display_exit_record()
+                        if exit_record == "exit":
+                            break
+                    else:
+                        # Ask to go back to the menu tracker
+                        self.view_main_menu_tracker.back_to_tracker_menu()
+                        clear_console()
 
                 # ------------
                 # NEXT ROUND
                 # ------------
-                # UPDATE RANK, SCORE, OPPONENTS FROM PLAYERS DETAIL
                 # Get players details of the tournament from the Database
                 players_details = self.tournament_to_track.get_players_details_from_detabase(
                     self.tournament_to_track.name,
@@ -411,8 +440,6 @@ class TournamentTrackerController:
                 # Re-initiate Players List Object
                 self.get_players_object_list()
 
-
-
                 # Check if Round is in the rounds list gets from the database
                 rounds_names = [f"Round {n}" for n in range(2, 5)]
                 for round_name in rounds_names:
@@ -428,7 +455,7 @@ class TournamentTrackerController:
                         new_round.define_start_date()
                         # Enter Score for every pair of matches
                         print(f"-----> {round_name} -----> ENTER SCORE ----->")
-                        matches_recorded = self.enter_score_round(matches_second_round)
+                        matches_recorded = self.get_score_round(matches_second_round)
                         # Ask user confirmation before save matches to round
                         confirmation = (
                             self.view_main_menu_tracker.confirm_save_round_1_score()
@@ -436,7 +463,7 @@ class TournamentTrackerController:
 
                         if confirmation == "yes":
                             new_round.define_end_date()
-                            new_round.insert_matches(matches_recorded)
+                            new_round.matches = matches_recorded
                             print(f"{round_name} : {new_round}")
                             rounds_list = self.tournament_to_track.get_rounds_from_database(
                                 self.tournament_to_track.name,
@@ -444,7 +471,7 @@ class TournamentTrackerController:
                                 self.database.tournament_query,
                             )
                             rounds_list.append(new_round.round_to_dict())
-                            self.tournament_to_track.save_rounds_to_database(
+                            self.tournament_to_track.update_rounds_database(
                                 rounds_list,
                                 self.tournament_to_track.name,
                                 self.tournaments_table,
@@ -461,12 +488,22 @@ class TournamentTrackerController:
                                 player_details = player.player_details_to_dict()
                                 players_details.append(player_details)
 
-                            self.tournament_to_track.save_player_details_to_database(
+                            self.tournament_to_track.update_player_details_database(
                                 players_details, self.tournament_to_track.name,
                                 self.tournaments_table, self.tournament_query)
 
                             # REFRESH PLAYERS OBJECTS
                             self.get_players_object_list()
+
+                            # Ask user to exit record
+                            exit_record = self.view_main_menu_tracker.display_exit_record()
+                            if exit_record == "exit":
+                                break
+
+                        else:
+                            # Ask to go back to the menu tracker
+                            self.view_main_menu_tracker.back_to_tracker_menu()
+                            clear_console()
                 else:
                     print("All Matches have been recorded.")
 

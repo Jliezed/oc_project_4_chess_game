@@ -70,6 +70,7 @@ class Player:
     # 'a' to Add a player to the tournament
     # 'pr' to modify player rank
     # 'rp' to remove a player from the tournament
+    # get_list_players_object()
     # -------------------------------------------------
     def search_by_fullname(self, player_fullname, players_table, player_query):
         """Search Player by Fullname in the Database
@@ -159,7 +160,3 @@ class Player:
         }
         return player_dict
 
-    # def update_rank_score_opponents_from_tournament(self, players_details):
-    #     self.rank = ""
-    #
-    #     return self.rank
