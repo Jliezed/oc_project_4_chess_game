@@ -14,14 +14,21 @@ class Match:
     #     """ Better representation of a tournament instance"""
     #     return f"([{self.player_a.index},{self.score_a}],[{self.player_b.index},{self.score_b}])"
 
+    # -------------------------------------------------------
+    # User select 'record' to start recording matches results
+    # -------------------------------------------------------
     def enter_score(self):
         print(f"MATCH: *{self.player_a.fullname}* VERSUS *{self.player_b.fullname}*")
-        self.score_a = float(input(f"Enter score of {self.player_a.fullname} [1 for winner/0 for loser/0.5 for draw] : "))
+        self.score_a = float(
+            input(
+                f"Enter score of {self.player_a.fullname} [1 for winner/0 for loser/0.5 for draw] : "
+            )
+        )
         self.score_b = 1.0 - self.score_a
         print(f"Score of {self.player_b.fullname} is {self.score_b}")
 
-        self.player_a.score += self.score_a
-        self.player_b.score += self.score_b
+        self.player_a.cumul_score += self.score_a
+        self.player_b.cumul_score += self.score_b
         return self.score_a, self.score_b
 
     def display_winner(self):
@@ -36,6 +43,8 @@ class Match:
         print(f"*{self.player_a.fullname}* VERSUS *{self.player_b.fullname}*")
 
     def display_players_score(self):
-        self.players_scores = ([self.player_a.position, self.score_a], [self.player_b.position, self.score_b])
+        self.players_scores = (
+            [self.player_a.id_database, self.score_a],
+            [self.player_b.id_database, self.score_b],
+        )
         return self.players_scores
-
