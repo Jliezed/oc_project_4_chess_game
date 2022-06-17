@@ -113,13 +113,13 @@ When 8 players added to the tournament, records can be started:
 
 
 *enter 'record' :  
--Start generate Rounds and Matches*
+-Start generate Rounds and Matches*  
 ![chess game tournament tracker main menu tournament information](images/tracker_menu_8_players_record.png)
 
-*- Enter scores for each match*
+*- Enter scores for each match*  
 ![chess game tournament tracker main menu tournament information](images/tracker_menu_8_players_scores.png)
 
-*Enter 'results': Get results of the tournament*
+*Enter 'results': Get results of the tournament*  
 ![chess game tournament tracker main menu tournament information](images/tracker_menu_8_players_results.png)
 
 
