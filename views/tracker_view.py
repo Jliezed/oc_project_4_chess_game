@@ -161,6 +161,7 @@ class ViewMainMenuTournamentTracker:
 
     def display_exit_record(self):
         user_action = input(
-            "Enter 'exit' to end record and go back to the main menu." ""
+            "Enter 'exit' to end record and go back to the main menu. Tape 'Enter' "
+            "to continue." ""
         ).lower()
         return user_action

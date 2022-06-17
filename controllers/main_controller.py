@@ -23,7 +23,7 @@ class MainController:
 
     def get_user_action(self):
         """ Get user selection in the menu """
-        self.user_action = input("What is you selection ?: ").lower()
+        self.user_action = input("What is your selection ?: ").lower()
 
     def get_list_players_object(self):
         players_fullname_list = [player["fullname"] for player in self.players_table]
