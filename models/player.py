@@ -2,7 +2,7 @@ class Player:
     """Player object can be added to a tournament object."""
 
     def __init__(self, first_name="", last_name="", birth_date="", gender="", rank=0,
-                 cumul_score=0):
+                 cumul_score=0, id_database=""):
         self.first_name = first_name
         self.last_name = last_name
         self.fullname = first_name + " " + last_name
@@ -11,14 +11,15 @@ class Player:
         self.rank = rank
 
         self.cumul_score = cumul_score
-        self.id_database = ""
+        self.id_database = id_database
         self.opponents = []
 
     def __repr__(self):
         """ Better representation of a player instance"""
         return (
             f"ID: {self.id_database} - Player : {self.fullname} - "
-            f"Rank {self.rank} - Score: {self.cumul_score} - Opponents: {self.opponents}"
+            f"Rank {self.rank} - Score: {self.cumul_score} - Opponents:"
+            f" {self.opponents}"
         )
 
     # ------------------------------------------------

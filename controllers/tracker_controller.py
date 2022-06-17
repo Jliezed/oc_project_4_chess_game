@@ -70,37 +70,45 @@ class TournamentTrackerController:
         :return: print results
         """
         # Sort Players by Score and Rank
-        self.players_object_list.sort(key=lambda player: (-player.cumul_score, player.rank))
+        self.players_object_list.sort(
+            key=lambda player: (-player.cumul_score, player.rank)
+        )
         for player in self.players_object_list:
-            print(f"{player.fullname} - score: {player.cumul_score} - rank {player.rank}")
+            print(
+                f"{player.fullname} - score: {player.cumul_score} - rank {player.rank}"
+            )
 
     def generate_next_round_matches(self):
         players_in_matches = []
         matches_next_round = []
+        remaining_players_object_list = self.players_object_list[:]
 
         for player in self.players_object_list:
             if player not in players_in_matches:
                 # Get next player
                 next_player_index = self.players_object_list.index(player) + 1
+                next_player = self.players_object_list[next_player_index]
                 next_next_player_index = self.players_object_list.index(player) + 2
-                if next_player_index in player.opponents:
+                if next_player_index in player.opponents or next_player in players_in_matches:
                     try:
                         next_player = self.players_object_list[next_next_player_index]
                     except IndexError:
-                        next_player = self.players_object_list[next_player_index]
+                        next_player = remaining_players_object_list[1]
                 else:
                     next_player = self.players_object_list[next_player_index]
 
-                # Append to players in match
-                players_in_matches.append(player)
                 players_in_matches.append(next_player)
+                remaining_players_object_list.remove(next_player)
+                player.opponents.append(next_player.id_database)
+
+                remaining_players_object_list.remove(player)
+                players_in_matches.append(player)
+                next_player.opponents.append(player.id_database)
 
                 match = Match(player, next_player)
                 match.display_match()
                 matches_next_round.append(match)
 
-                player.opponents.append(next_player.id_database)
-                next_player.opponents.append(player.id_database)
             else:
                 pass
         return matches_next_round
@@ -152,9 +160,7 @@ class TournamentTrackerController:
                         player_fullname, self.players_table, self.player_query
                     )
                     player_id = player_to_add.get_player_index(
-                        player_to_add.fullname,
-                        self.players_table,
-                        self.player_query,
+                        player_to_add.fullname, self.players_table, self.player_query,
                     )
 
                     # Get Tournament players list and check if already in the list
@@ -229,9 +235,7 @@ class TournamentTrackerController:
                     player_to_change_rank = Player()
                     try:
                         player_to_change_rank.search_by_fullname(
-                            player_fullname,
-                            self.players_table,
-                            self.player_query,
+                            player_fullname, self.players_table, self.player_query,
                         )
 
                         is_number = ""
@@ -336,16 +340,25 @@ class TournamentTrackerController:
                     )
                     # Update players details in the database
                     self.tournament_to_track.update_player_details_database(
-                        players_details, self.tournament_to_track.name,
-                        self.tournaments_table, self.tournament_query)
+                        players_details,
+                        self.tournament_to_track.name,
+                        self.tournaments_table,
+                        self.tournament_query,
+                    )
                     # Update rounds in the database
                     self.tournament_to_track.update_rounds_database(
-                        rounds, self.tournament_to_track.name,
-                        self.tournaments_table, self.tournament_query)
+                        rounds,
+                        self.tournament_to_track.name,
+                        self.tournaments_table,
+                        self.tournament_query,
+                    )
 
                 # RESET TOURNAMENT INFO
                 self.tournament_to_track.search_by_name(
-                    self.tournament_to_track.name, self.tournaments_table, self.tournament_query)
+                    self.tournament_to_track.name,
+                    self.tournaments_table,
+                    self.tournament_query,
+                )
             # -------------------------------------------------------
             # User select 'record' to start recording matches results
             # -------------------------------------------------------
@@ -379,6 +392,7 @@ class TournamentTrackerController:
                         self.view_main_menu_tracker.confirm_save_round_1_score()
                     )
                     if confirmation == "yes":
+                        round_1.define_end_date()
                         round_1.matches = matches_recorded
                         print(f"Round 1 : {round_1}")
                         # Save round in tournament database
@@ -390,7 +404,7 @@ class TournamentTrackerController:
                             self.tournaments_table,
                             self.database.tournament_query,
                         )
-                        round_1.define_end_date()
+
 
                         # Save players in tournament database
                         players_details = []
@@ -403,8 +417,11 @@ class TournamentTrackerController:
                             players_details.append(player_details)
 
                         self.tournament_to_track.update_player_details_database(
-                            players_details, self.tournament_to_track.name,
-                            self.tournaments_table, self.tournament_query)
+                            players_details,
+                            self.tournament_to_track.name,
+                            self.tournaments_table,
+                            self.tournament_query,
+                        )
 
                         # Ask user to exit record
                         exit_record = self.view_main_menu_tracker.display_exit_record()
@@ -419,7 +436,8 @@ class TournamentTrackerController:
                 # NEXT ROUND
                 # ------------
                 # Get players details of the tournament from the Database
-                players_details = self.tournament_to_track.get_players_details_from_detabase(
+                players_details = \
+                    self.tournament_to_track.get_players_details_from_database(
                     self.tournament_to_track.name,
                     self.tournaments_table,
                     self.database.tournament_query,
@@ -427,15 +445,17 @@ class TournamentTrackerController:
 
                 for player in players_details:
                     player_data = Player()
-                    player_data.search_by_index(player["id_database"],
-                                                self.players_table)
+                    player_data.search_by_index(
+                        player["id_database"], self.players_table
+                    )
                     # Retrieve Rank, Score and Opponents
                     player_data.rank = player["rank"]
                     player_data.cumul_score = player["cumul_score"]
                     player_data.opponents = player["opponents"]
                     # Update the database
                     player_data.update_player_rank_score_opponents(
-                        self.players_table, self.player_query)
+                        self.players_table, self.player_query
+                    )
 
                 # Re-initiate Players List Object
                 self.get_players_object_list()
@@ -449,13 +469,13 @@ class TournamentTrackerController:
                     if not is_round_in_tournament:
                         print(f"-----> {round_name} -----> LIST OF MATCHES ----->")
                         self.sort_players_by_score_rank()
-                        matches_second_round = self.generate_next_round_matches()
+                        matches_next_round = self.generate_next_round_matches()
                         # Create Round
                         new_round = Round(name=round_name)
                         new_round.define_start_date()
                         # Enter Score for every pair of matches
                         print(f"-----> {round_name} -----> ENTER SCORE ----->")
-                        matches_recorded = self.get_score_round(matches_second_round)
+                        matches_recorded = self.get_score_round(matches_next_round)
                         # Ask user confirmation before save matches to round
                         confirmation = (
                             self.view_main_menu_tracker.confirm_save_round_1_score()
@@ -489,14 +509,19 @@ class TournamentTrackerController:
                                 players_details.append(player_details)
 
                             self.tournament_to_track.update_player_details_database(
-                                players_details, self.tournament_to_track.name,
-                                self.tournaments_table, self.tournament_query)
+                                players_details,
+                                self.tournament_to_track.name,
+                                self.tournaments_table,
+                                self.tournament_query,
+                            )
 
                             # REFRESH PLAYERS OBJECTS
                             self.get_players_object_list()
 
                             # Ask user to exit record
-                            exit_record = self.view_main_menu_tracker.display_exit_record()
+                            exit_record = (
+                                self.view_main_menu_tracker.display_exit_record()
+                            )
                             if exit_record == "exit":
                                 break
 
@@ -566,8 +591,10 @@ class TournamentTrackerController:
             # -------------------------------------------------------------
             elif user_action_tracker == "dr":
                 self.tournament_to_track.display_rounds(
-                    self.tournament_to_track.name, self.tournaments_table,
-                    self.tournament_query)
+                    self.tournament_to_track.name,
+                    self.tournaments_table,
+                    self.tournament_query,
+                )
 
                 # Ask to go back to the menu tracker
                 self.view_main_menu_tracker.back_to_tracker_menu()
@@ -577,9 +604,11 @@ class TournamentTrackerController:
             # User select 'dm' to display all matches of the tournament
             # -------------------------------------------------------------
             elif user_action_tracker == "dm":
-                self.tournament_to_track.display_matches(self.tournament_to_track.name,
-                                                         self.tournaments_table,
-                                                         self.tournament_query)
+                self.tournament_to_track.display_matches(
+                    self.tournament_to_track.name,
+                    self.tournaments_table,
+                    self.tournament_query,
+                )
 
                 # Ask to go back to the menu tracker
                 self.view_main_menu_tracker.back_to_tracker_menu()

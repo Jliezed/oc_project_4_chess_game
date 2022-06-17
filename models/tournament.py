@@ -116,7 +116,7 @@ class Tournament:
         return rounds_list
 
 
-    def get_players_details_from_detabase(self, tournament_name, tournaments_table,
+    def get_players_details_from_database(self, tournament_name, tournaments_table,
                                           tournament_query):
         tournament_info = tournaments_table.get(
             tournament_query.name == tournament_name
@@ -128,7 +128,9 @@ class Tournament:
     def display_rounds(self, tournament_name, tournaments_table, tournament_query):
         tournament_info = tournaments_table.get(tournament_query.name == tournament_name)
         rounds_list = tournament_info["rounds"]
-        return print(rounds_list)
+        for round in rounds_list:
+            round_name = round["name"]
+            print(round_name, round)
 
     def display_matches(self, tournament_name, tournaments_table, tournament_query):
         tournament_info = tournaments_table.get(tournament_query.name == tournament_name)

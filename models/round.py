@@ -8,11 +8,11 @@ class Round:
         self.end_date = end_date
         self.matches = []
 
-    # def __repr__(self):
-    #     """ Better representation of a tournament instance"""
-    #     return (
-    #         f"Name: {self.name} - Start Date: {self.start_date} - End Date: {self.end_date} - Matches: {self.matches}"
-    #     )
+    def __repr__(self):
+        """ Better representation of a tournament instance"""
+        return (
+            f"Name: {self.name} - Start Date: {self.start_date} - End Date: {self.end_date} - Matches: {self.matches}"
+        )
 
     def define_start_date(self):
         if self.start_date == "":
