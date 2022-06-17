@@ -105,14 +105,22 @@ When 8 players added to the tournament, records can be started:
   - Reset Players
 - `Start Rounds` : enter scores for each matches of each rounds (4 matches per round)
 - `Results` : display tournament results when all rounds recorded
-- `Reports` : get more information
+- `Reports` : get more information about rounds and matches
 
-*enter 'record' : Access tournament information*
-![chess game tournament tracker main menu tournament information](images/main_menu_ti.png)
 
-*enter 'results' : Access tournament information*
-![chess game tournament tracker main menu tournament information](images/main_menu_ti.png)
+![chess game tournament tracker main menu](images/tracker_menu_8_players.png)
 
+
+
+*enter 'record' :  
+-Start generate Rounds and Matches*
+![chess game tournament tracker main menu tournament information](images/tracker_menu_8_players_record.png)
+
+*- Enter scores for each match*
+![chess game tournament tracker main menu tournament information](images/tracker_menu_8_players_scores.png)
+
+*Enter 'results': Get results of the tournament*
+![chess game tournament tracker main menu tournament information](images/tracker_menu_8_players_results.png)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
