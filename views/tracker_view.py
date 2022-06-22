@@ -55,13 +55,9 @@ class ViewMainMenuTournamentTracker:
                 "enter 'lpr' : Display list of players sort by Rank\n"
                 "enter 'pr' : Modify the rank of a player\n"
                 "enter 'reset-p' : Reset players to this tournament\n"
-                "-------------------------------------------------------"
-            )
-            print(
+                "-------------------------------------------------------\n"
                 "--------------------- START ROUNDS --------------------\n"
-                "enter 'record' : Record matches results"
-            )
-            print(
+                "enter 'record' : Record matches results\n"
                 "---------------------- GET RESULTS --------------------\n"
                 "enter 'results' : Get results of the tournament\n"
                 "------------------------ REPORTS ----------------------\n"
@@ -89,6 +85,23 @@ class ViewMainMenuTournamentTracker:
             f" Enter 'yes' or 'no': "
         ).lower()
         return confirmation
+
+    # -----------------------------
+    # COMMON:
+    # User select 'lpa' to display players in the tournament sort by Alphabet
+    # User select 'lpr' to display players in the tournament sort by Rank
+    # -----------------------------
+    def display_all_players(self, players_in_tournament):
+        """Display list of all players saved in the database
+        :param: players_table: refers to the player tab in the database
+        :return: print list of all players in the database
+        """
+        print(
+            f"There are {len(players_in_tournament)} players in the tournament :\n"
+            f"----------------------------------------"
+        )
+        for player in players_in_tournament:
+            print(f"Fullname: {player.fullname}\t -\t Rank : {player.rank}")
 
     # --------------------------------------
     # User select 'pr' to modify player rank
@@ -120,19 +133,29 @@ class ViewMainMenuTournamentTracker:
     # -------------------------------------------------------------
     def confirm_reset_players_list(self):
         confirmation = input(
-            f"Do you want to reset the list of players of this tournament? Enter 'yes' or 'no': "
+            f"Do you want to reset the list of players of this tournament?"
+            f" Enter 'yes' or 'no': "
         ).lower()
         return confirmation
 
     # -------------------------------------------------------
     # User select 'record' to start recording matches results
     # -------------------------------------------------------
-    def confirm_save_round_1_score(self):
+    def confirm_save_round_score(self):
         confirmation = input(
-            f"Do you want to save the first round (you won't be able to modify scores afterwards) ? "
+            f"Do you want to save the first round (you won't be able to modify scores"
+            f" afterwards) ? "
             f"Enter 'yes' or 'no': "
         ).lower()
         return confirmation
+
+    def display_exit_record(self):
+        """During record, ask user if he/she wants to exit the record"""
+        user_action = input(
+            "Enter 'exit' to end record and go back to the main menu. Tape 'Enter' "
+            "to continue." ""
+        ).lower()
+        return user_action
 
     # ------------
     # BACK TO MENU
@@ -144,24 +167,6 @@ class ViewMainMenuTournamentTracker:
         ).lower()
         return back_to_menu
 
-    # -----------------------------
-    # DISPLAY PLAYERS OF TOURNAMENT
-    # -----------------------------
-    def display_all_players(self, players_in_tournament):
-        """Display list of all players saved in the database
-        :param: players_table: refers to the player tab in the database
-        :return: print list of all players in the database
-        """
-        print(
-            f"There are {len(players_in_tournament)} players in the tournament :\n"
-            f"----------------------------------------"
-        )
-        for player in players_in_tournament:
-            print(f"Fullname: {player.fullname}\t -\t Rank : {player.rank}")
 
-    def display_exit_record(self):
-        user_action = input(
-            "Enter 'exit' to end record and go back to the main menu. Tape 'Enter' "
-            "to continue." ""
-        ).lower()
-        return user_action
+
+

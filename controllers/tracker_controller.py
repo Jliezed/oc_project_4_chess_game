@@ -9,14 +9,13 @@ from models.console import clear_console
 
 class TournamentTrackerController:
     def __init__(self,):
-        """Initialize with models from models and views"""
+        """Initialize with models and views"""
         self.view_main_menu_tracker = ViewMainMenuTournamentTracker()
         self.database = DatabaseChessGame()
         self.players_table = self.database.players_table
         self.tournaments_table = self.database.tournaments_table
         self.tournament_query = self.database.tournament_query
         self.player_query = self.database.player_query
-
         self.tournament_to_track = Tournament()
         self.players_object_list = []
 
@@ -25,8 +24,7 @@ class TournamentTrackerController:
         :return: List of players object
         """
         self.players_object_list = []
-        list_players = self.tournament_to_track.players
-        for player_id in list_players:
+        for player_id in self.tournament_to_track.players:
             player = Player()
             player.search_by_index(player_id, self.players_table)
             self.players_object_list.append(player)
@@ -67,7 +65,7 @@ class TournamentTrackerController:
         """Sort players by score then by rank
         :return: print results
         """
-        # Sort Players by Score and Rank
+        # Sort Players by Score and then by Rank
         self.players_object_list.sort(
             key=lambda player: (-player.cumul_score, player.rank)
         )
@@ -77,16 +75,25 @@ class TournamentTrackerController:
             )
 
     def generate_next_round_matches(self):
+        """
+
+        :return:
+        """
         players_in_matches = []
         matches_next_round = []
         remaining_players_object_list = self.players_object_list[:]
 
         for player in self.players_object_list:
             if player not in players_in_matches:
+
                 # Get next player
                 next_player_index = self.players_object_list.index(player) + 1
                 next_player = self.players_object_list[next_player_index]
+
+                # Get next next player in case next player is an opponent
                 next_next_player_index = self.players_object_list.index(player) + 2
+
+                # Check if next next player not out of range
                 if next_player_index in player.opponents or next_player in players_in_matches:
                     try:
                         next_player = self.players_object_list[next_next_player_index]
@@ -95,14 +102,17 @@ class TournamentTrackerController:
                 else:
                     next_player = self.players_object_list[next_player_index]
 
+                # Actions for next player
                 players_in_matches.append(next_player)
                 remaining_players_object_list.remove(next_player)
                 player.opponents.append(next_player.id_database)
 
+                # Actions for current player
                 remaining_players_object_list.remove(player)
                 players_in_matches.append(player)
                 next_player.opponents.append(player.id_database)
 
+                # Display matches
                 match = Match(player, next_player)
                 match.display_match()
                 matches_next_round.append(match)
@@ -125,7 +135,7 @@ class TournamentTrackerController:
             tournament_name, self.tournaments_table, self.tournament_query
         )
 
-        # Initiate Players Object list
+        # Initialize Players Object list
         self.get_players_object_list()
 
         # Reset Players Attributes: Scores & Opponents
@@ -194,9 +204,9 @@ class TournamentTrackerController:
                 self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
-            # ----------------------------------------------------------------------
+            # -----------------------------------------------------------------------
             # User select 'lpa' to display players in the tournament sort by Alphabet
-            # ---------------------------------------------------------------------
+            # -----------------------------------------------------------------------
             elif user_action_tracker == "lpa":
                 # Sort Players by alphabet
                 players_sorted_by_alphabet = self.get_players_object_list()
@@ -209,9 +219,9 @@ class TournamentTrackerController:
                 self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
-            # ----------------------------------------------------------------------
-            # User select 'lpr' to display players in the tournament sort by Alphabet
-            # ---------------------------------------------------------------------
+            # --------------------------------------------------------------------
+            # User select 'lpr' to display players in the tournament sort by Rank
+            # -------------------------------------------------------------------
             elif user_action_tracker == "lpr":
                 # Sort Players by alphabet
                 players_sorted_by_rank = self.get_players_object_list()
@@ -226,6 +236,7 @@ class TournamentTrackerController:
             # User select 'pr' to modify player rank
             # --------------------------------------
             elif user_action_tracker == "pr":
+                # Check that record has not been started
                 if self.tournament_to_track.rounds == []:
                     player_fullname = (
                         self.view_main_menu_tracker.get_player_fullname_to_change_rank()
@@ -321,7 +332,7 @@ class TournamentTrackerController:
             # User select 'reset-p' to remove all players to the tournament
             # -------------------------------------------------------------
             elif user_action_tracker == "reset-p":
-                # Set players value to empty
+                # Set players & rounds values to empty
                 players_list = []
                 players_details = []
                 rounds = []
@@ -382,17 +393,20 @@ class TournamentTrackerController:
                     # Create Round
                     round_1 = Round(name="Round 1")
                     round_1.define_start_date()
+
                     # Enter Score for every pair of matches
                     print("-----> ROUND 1 -----> ENTER SCORE ----->")
                     matches_recorded = self.get_score_round(matches_first_round)
+
                     # Ask user confirmation before save matches to round
                     confirmation = (
-                        self.view_main_menu_tracker.confirm_save_round_1_score()
+                        self.view_main_menu_tracker.confirm_save_round_score()
                     )
                     if confirmation == "yes":
                         round_1.define_end_date()
                         round_1.matches = matches_recorded
                         print(f"Round 1 : {round_1}")
+
                         # Save round in tournament database
                         round_dict = round_1.round_to_dict()
                         rounds_list = [round_dict]
@@ -402,7 +416,6 @@ class TournamentTrackerController:
                             self.tournaments_table,
                             self.database.tournament_query,
                         )
-
 
                         # Save players in tournament database
                         players_details = []
@@ -441,6 +454,7 @@ class TournamentTrackerController:
                     self.database.tournament_query,
                 )
 
+                # Convert player in players_details into player object
                 for player in players_details:
                     player_data = Player()
                     player_data.search_by_index(
@@ -476,7 +490,7 @@ class TournamentTrackerController:
                         matches_recorded = self.get_score_round(matches_next_round)
                         # Ask user confirmation before save matches to round
                         confirmation = (
-                            self.view_main_menu_tracker.confirm_save_round_1_score()
+                            self.view_main_menu_tracker.confirm_save_round_score()
                         )
 
                         if confirmation == "yes":
@@ -584,9 +598,9 @@ class TournamentTrackerController:
                 self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
-            # -------------------------------------------------------------
+            # --------------------------------------------------------
             # User select 'dr' to display all rounds of the tournament
-            # -------------------------------------------------------------
+            # --------------------------------------------------------
             elif user_action_tracker == "dr":
                 self.tournament_to_track.display_rounds(
                     self.tournament_to_track.name,
@@ -598,9 +612,9 @@ class TournamentTrackerController:
                 self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
-            # -------------------------------------------------------------
+            # ---------------------------------------------------------
             # User select 'dm' to display all matches of the tournament
-            # -------------------------------------------------------------
+            # ---------------------------------------------------------
             elif user_action_tracker == "dm":
                 self.tournament_to_track.display_matches(
                     self.tournament_to_track.name,
@@ -617,16 +631,6 @@ class TournamentTrackerController:
             # -------------------------------------------------------------
             elif user_action_tracker == "q":
                 exit()
-
-            # -------------------------------------------------------------
-            # User select 'test' to display tournament results
-            # -------------------------------------------------------------
-            elif user_action_tracker == "test":
-                pass
-
-                # Ask to go back to the menu tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
-                clear_console()
 
             else:
                 print("sorry your selection doesn't exist")

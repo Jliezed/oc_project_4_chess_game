@@ -78,9 +78,18 @@ class Tournament:
         )
         return self.players
 
+
+
     # -------------------------------------------------------
-    # User select 'record' to start recording matches results
+    # COMMON:
+    # User select 'reset-p' to remove all players to the tournament
     # -------------------------------------------------------
+    def update_player_details_database(self, players_details, tournament_name,
+                                       tournaments_table, tournament_query):
+        tournaments_table.update({"players_details": players_details},
+                                 tournament_query.name == tournament_name)
+        return self.players_details
+
     def update_rounds_database(
         self, round_to_save, tournament_name, tournaments_table, tournament_query
     ):
@@ -89,6 +98,9 @@ class Tournament:
         )
         return self.rounds
 
+    # -------------------------------------------------------
+    # User select 'record' to start recording matches results
+    # -------------------------------------------------------
     def is_round_in_tournament(self, round_to_check, rounds_list):
         rounds_names_list = []
         for r in rounds_list:
@@ -98,12 +110,6 @@ class Tournament:
             return True
         else:
             return False
-
-    def update_player_details_database(self, players_details, tournament_name,
-                                       tournaments_table, tournament_query):
-        tournaments_table.update({"players_details": players_details},
-                                 tournament_query.name == tournament_name)
-        return self.players_details
 
     # ---------------------------------------------------
     # COMMON :
@@ -117,7 +123,6 @@ class Tournament:
         rounds_list = tournament_info["rounds"]
         return rounds_list
 
-
     def get_players_details_from_database(self, tournament_name, tournaments_table,
                                           tournament_query):
         tournament_info = tournaments_table.get(
@@ -126,7 +131,9 @@ class Tournament:
         players_details = tournament_info["players_details"]
         return players_details
 
-
+    # --------------------------------------------------------
+    # User select 'dr' to display all rounds of the tournament
+    # --------------------------------------------------------
     def display_rounds(self, tournament_name, tournaments_table, tournament_query):
         tournament_info = tournaments_table.get(tournament_query.name == tournament_name)
         rounds_list = tournament_info["rounds"]
@@ -134,6 +141,9 @@ class Tournament:
             round_name = round["name"]
             print(round_name, round)
 
+    # ---------------------------------------------------------
+    # User select 'dm' to display all matches of the tournament
+    # ---------------------------------------------------------
     def display_matches(self, tournament_name, tournaments_table, tournament_query):
         tournament_info = tournaments_table.get(tournament_query.name == tournament_name)
         rounds_list = tournament_info["rounds"]

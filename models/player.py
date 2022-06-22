@@ -9,7 +9,6 @@ class Player:
         self.birth_date = birth_date
         self.gender = gender
         self.rank = rank
-
         self.cumul_score = cumul_score
         self.id_database = id_database
         self.opponents = []
@@ -21,6 +20,14 @@ class Player:
             f"Rank {self.rank} - Score: {self.cumul_score} - Opponents:"
             f" {self.opponents}"
         )
+
+    # ------------------------------------------------
+    # User select 'p' to Add a player to the database
+    # ------------------------------------------------
+    def reset_score_opponents(self, players_table, player_query):
+        """Reset Score and Opponents in players table"""
+        players_table.update({"cumul_score": 0}, player_query.fullname == self.fullname)
+        players_table.update({"opponents": []}, player_query.fullname == self.fullname)
 
     # ------------------------------------------------
     # User select 'p' to Add a player to the database
@@ -125,6 +132,7 @@ class Player:
     # User select 'record' to start recording matches results
     # -------------------------------------------------------
     def update_player_score_opponents(self, players_table, player_query):
+        """Update player's Score & Opponents in the database"""
         players_table.update(
             {"cumul_score": self.cumul_score}, player_query.fullname == self.fullname
         )
@@ -132,7 +140,19 @@ class Player:
             {"opponents": self.opponents}, player_query.fullname == self.fullname
         )
 
+    def player_details_to_dict(self):
+        """Transform player info into dict in order to save it to the database"""
+        player_dict = {
+            "id_database": self.id_database,
+            "fullname": self.fullname,
+            "rank": self.rank,
+            "cumul_score": self.cumul_score,
+            "opponents": self.opponents,
+        }
+        return player_dict
+
     def update_player_rank_score_opponents(self, players_table, player_query):
+        """Update player's Rank, Score & Opponents in the database"""
         players_table.update(
             {"rank": self.rank}, player_query.fullname == self.fullname
         )
@@ -147,17 +167,7 @@ class Player:
 
 
 
-    def reset_score_opponents(self, players_table, player_query):
-        players_table.update({"cumul_score": 0}, player_query.fullname == self.fullname)
-        players_table.update({"opponents": []}, player_query.fullname == self.fullname)
 
-    def player_details_to_dict(self):
-        player_dict = {
-            "id_database": self.id_database,
-            "fullname": self.fullname,
-            "rank": self.rank,
-            "cumul_score": self.cumul_score,
-            "opponents": self.opponents,
-        }
-        return player_dict
+
+
 
