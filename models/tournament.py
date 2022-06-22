@@ -13,7 +13,6 @@ class Tournament:
         self.rounds = []
         self.time_control = time_control
         self.description = description
-        self.results = []
 
     def __repr__(self):
         """ Better representation of a tournament instance"""
@@ -41,7 +40,6 @@ class Tournament:
             "rounds": self.rounds,
             "time control": self.time_control,
             "description": self.description,
-            "results": self.results,
         }
         tournaments_table.insert(tournament)
         return print(f"Tournament : {self.name} has been added to the database")
@@ -60,7 +58,6 @@ class Tournament:
         self.rounds = query_result["rounds"]
         self.time_control = query_result["time control"]
         self.description = query_result["description"]
-        self.results = query_result["results"]
         return query_result
 
     # -------------------------------------------------
