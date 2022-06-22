@@ -217,5 +217,6 @@ class MainController:
 
             else:
                 # Ask to go back to the main menu
-                self.view_main_menu.back_to_menu()
-                clear_console()
+                back_to_menu = self.view_main_menu.back_to_menu()
+                if back_to_menu != "yes":
+                    exit()

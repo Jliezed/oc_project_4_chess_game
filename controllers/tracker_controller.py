@@ -237,6 +237,8 @@ class TournamentTrackerController:
             # --------------------------------------
             elif user_action_tracker == "pr":
                 # Check that record has not been started
+                self.tournament_to_track.get_rounds_from_database(
+                    self.tournament_to_track.name, self.tournaments_table, self.tournament_query)
                 if self.tournament_to_track.rounds == []:
                     player_fullname = (
                         self.view_main_menu_tracker.get_player_fullname_to_change_rank()
@@ -563,10 +565,10 @@ class TournamentTrackerController:
                 matches_in_rounds_formatted = []
                 for r in rounds:
                     matches = r["matches"]
-                    for ind_match in matches:
-                        playera = ind_match[0]
+                    for individual_match in matches:
+                        playera = individual_match[0]
                         matches_in_rounds_formatted.append(playera)
-                        playerb = ind_match[1]
+                        playerb = individual_match[1]
                         matches_in_rounds_formatted.append(playerb)
 
                 # Cumulate scores for each player
@@ -635,3 +637,5 @@ class TournamentTrackerController:
             else:
                 print("sorry your selection doesn't exist")
                 back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
+                if back_to_menu != "yes":
+                    exit()
