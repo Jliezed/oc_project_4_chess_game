@@ -75,7 +75,7 @@ class MainController:
                     new_player.save_to_database(self.players_table)
 
                 # Ask to go back to the main menu
-                self.view_main_menu.back_to_menu()
+                back_to_menu = self.view_main_menu.back_to_menu()
                 clear_console()
 
             # -------------------------------------------------------------
@@ -91,7 +91,7 @@ class MainController:
                 )
 
                 # Ask to go back to the main menu
-                self.view_main_menu.back_to_menu()
+                back_to_menu = self.view_main_menu.back_to_menu()
                 clear_console()
 
             # ---------------------------------------------------------
@@ -105,7 +105,7 @@ class MainController:
                 self.view_main_menu_player.display_all_players(players_sorted_by_rank)
 
                 # Ask to go back to the main menu
-                self.view_main_menu.back_to_menu()
+                back_to_menu = self.view_main_menu.back_to_menu()
                 clear_console()
 
             # ----------------------------------------------
@@ -118,7 +118,7 @@ class MainController:
                 )
 
                 # Ask to go back to the main menu
-                self.view_main_menu.back_to_menu()
+                back_to_menu = self.view_main_menu.back_to_menu()
                 clear_console()
 
             # ---------------------------------------------------
@@ -153,7 +153,7 @@ class MainController:
                     new_tournament.save_to_database(self.tournaments_table)
 
                 # Ask to go back to the main menu
-                self.view_main_menu.back_to_menu()
+                back_to_menu = self.view_main_menu.back_to_menu()
                 clear_console()
 
             # ---------------------------------------------------
@@ -166,7 +166,7 @@ class MainController:
                 )
 
                 # Ask to go back to the main menu
-                self.view_main_menu.back_to_menu()
+                back_to_menu = self.view_main_menu.back_to_menu()
                 clear_console()
 
             # --------------------------------------------------
@@ -179,7 +179,7 @@ class MainController:
                 )
 
                 # Ask to go back to the main menu
-                self.view_main_menu.back_to_menu()
+                back_to_menu = self.view_main_menu.back_to_menu()
                 clear_console()
 
             # -------------------------------------------------------------
@@ -196,7 +196,7 @@ class MainController:
                 self.database.reset_database(confirm_reset)
 
                 # Ask to go back to the main menu
-                self.view_main_menu.back_to_menu()
+                back_to_menu = self.view_main_menu.back_to_menu()
                 clear_console()
 
             # -------------------------------------------------------------

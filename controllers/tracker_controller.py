@@ -201,7 +201,7 @@ class TournamentTrackerController:
                     print("The player name doesn't exist in the database.")
 
                 # Ask go back to Menu Tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
+                back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
             # -----------------------------------------------------------------------
@@ -216,7 +216,7 @@ class TournamentTrackerController:
                 )
 
                 # Ask go back to Menu Tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
+                back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
             # --------------------------------------------------------------------
@@ -229,7 +229,7 @@ class TournamentTrackerController:
                 self.view_main_menu_tracker.display_all_players(players_sorted_by_rank)
 
                 # Ask go back to Menu Tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
+                back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
             # --------------------------------------
@@ -279,7 +279,7 @@ class TournamentTrackerController:
                     )
 
                 # Ask go back to Menu Tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
+                back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
             # -------------------------------------------------------
@@ -327,7 +327,7 @@ class TournamentTrackerController:
                     print("The player name doesn't exist in the database.")
 
                 # Ask go back to Menu Tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
+                back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
             # -------------------------------------------------------------
@@ -547,7 +547,7 @@ class TournamentTrackerController:
                     print("All Matches have been recorded.")
 
                 # Ask to go back to the menu tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
+                back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
             # ---------------------------------------------------
@@ -597,7 +597,7 @@ class TournamentTrackerController:
                     print(f"{player_result.fullname} - Score: {scores_player}")
 
                 # Ask to go back to the menu tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
+                back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
             # --------------------------------------------------------
@@ -611,7 +611,7 @@ class TournamentTrackerController:
                 )
 
                 # Ask to go back to the menu tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
+                back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
             # ---------------------------------------------------------
@@ -625,7 +625,7 @@ class TournamentTrackerController:
                 )
 
                 # Ask to go back to the menu tracker
-                self.view_main_menu_tracker.back_to_tracker_menu()
+                back_to_menu = self.view_main_menu_tracker.back_to_tracker_menu()
                 clear_console()
 
             # -------------------------------------------------------------
