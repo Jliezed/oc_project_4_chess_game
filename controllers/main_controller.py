@@ -10,7 +10,7 @@ class MainController:
     """Controller class that run the program"""
 
     def __init__(self):
-        """Initialize with models from models and views"""
+        """Initialize with models and views"""
         self.view_main_menu = ViewMainMenu()
         self.view_main_menu_player = ViewMainMenuPlayer()
         self.view_main_menu_tournament = ViewMainMenuTournament()
@@ -26,6 +26,8 @@ class MainController:
         self.user_action = input("What is your selection ?: ").lower()
 
     def get_list_players_object(self):
+        """Retrieve players fullname in the database and transform them to a list of
+        players objects"""
         players_fullname_list = [player["fullname"] for player in self.players_table]
         players_object_list = []
         for player_fullname in players_fullname_list:
@@ -73,7 +75,7 @@ class MainController:
                     new_player.save_to_database(self.players_table)
 
                 # Ask to go back to the main menu
-                self.view_main_menu_player.back_to_menu()
+                self.view_main_menu.back_to_menu()
                 clear_console()
 
             # -------------------------------------------------------------
@@ -89,7 +91,7 @@ class MainController:
                 )
 
                 # Ask to go back to the main menu
-                self.view_main_menu_player.back_to_menu()
+                self.view_main_menu.back_to_menu()
                 clear_console()
 
             # ---------------------------------------------------------
@@ -103,7 +105,7 @@ class MainController:
                 self.view_main_menu_player.display_all_players(players_sorted_by_rank)
 
                 # Ask to go back to the main menu
-                self.view_main_menu_player.back_to_menu()
+                self.view_main_menu.back_to_menu()
                 clear_console()
 
             # ----------------------------------------------
@@ -116,7 +118,7 @@ class MainController:
                 )
 
                 # Ask to go back to the main menu
-                self.view_main_menu_player.back_to_menu()
+                self.view_main_menu.back_to_menu()
                 clear_console()
 
             # ---------------------------------------------------
@@ -151,7 +153,7 @@ class MainController:
                     new_tournament.save_to_database(self.tournaments_table)
 
                 # Ask to go back to the main menu
-                self.view_main_menu_tournament.back_to_menu()
+                self.view_main_menu.back_to_menu()
                 clear_console()
 
             # ---------------------------------------------------
@@ -164,7 +166,7 @@ class MainController:
                 )
 
                 # Ask to go back to the main menu
-                self.view_main_menu_tournament.back_to_menu()
+                self.view_main_menu.back_to_menu()
                 clear_console()
 
             # --------------------------------------------------
@@ -177,7 +179,7 @@ class MainController:
                 )
 
                 # Ask to go back to the main menu
-                self.view_main_menu_tournament.back_to_menu()
+                self.view_main_menu.back_to_menu()
                 clear_console()
 
             # -------------------------------------------------------------

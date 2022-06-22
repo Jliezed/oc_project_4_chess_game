@@ -1,5 +1,6 @@
 class Tournament:
-    """Tournament object"""
+    """Tournament object which includes all information about players, rounds,
+    matches and scores"""
 
     def __init__(self, name="", location="", date="", nb_rounds=4,
                  time_control="", description=""):
@@ -18,7 +19,8 @@ class Tournament:
         """ Better representation of a tournament instance"""
         return (
             f"Tournament : {self.name} based in {self.location} - {self.date} "
-            f"Players: {self.players} - nb rounds: {self.rounds} - Time control: {self.time_control}"
+            f"Players: {self.players} - nb rounds: {self.rounds} - "
+            f"Time control: {self.time_control}"
         )
 
     # ---------------------------------------------------

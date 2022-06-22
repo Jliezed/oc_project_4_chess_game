@@ -1,4 +1,5 @@
 class Match:
+    """Match Class used when Round start"""
     def __init__(self, player_a, player_b, score_a="", score_b=""):
         self.player_a = player_a
         self.score_a = score_a

@@ -1,8 +1,8 @@
+from models.database import DatabaseChessGame
+from models.tournament import Tournament
+from models.player import Player
 from models.round import Round
 from models.match import Match
-from models.tournament import Tournament
-from models.database import DatabaseChessGame
-from models.player import Player
 from views.tracker_view import ViewMainMenuTournamentTracker
 from models.console import clear_console
 
@@ -14,8 +14,6 @@ class TournamentTrackerController:
         self.database = DatabaseChessGame()
         self.players_table = self.database.players_table
         self.tournaments_table = self.database.tournaments_table
-        self.rounds_table = self.database.rounds_table
-        self.matches_table = self.database.matches_table
         self.tournament_query = self.database.tournament_query
         self.player_query = self.database.player_query
 

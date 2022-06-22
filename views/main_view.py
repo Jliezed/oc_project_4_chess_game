@@ -6,10 +6,10 @@ class ViewMainMenu:
     """Main view that display the menu options"""
 
     def __init__(self):
-        pass
+        self.logo = logo
 
     def show_logo(self):
-        print(logo)
+        return print(self.logo)
 
     def display_menu(self):
         """ Display user options for the main menu"""
@@ -158,17 +158,11 @@ class ViewMainMenuPlayer:
         else:
             print("Sorry, the fullname you enter doesn't exist in the database")
 
-    def back_to_menu(self):
-        """ Ask user to go back to the menu """
-        back_to_menu = input(
-            "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
-        ).lower()
-        return back_to_menu
-
 
 class ViewMainMenuTournament:
     """
-    View specific to tournament option in the main menu (add a tournament to the database, display list of tournaments,..)
+    View specific to tournament option in the main menu (add a tournament to the database,
+     display list of tournaments,..)
     """
 
     def __init__(self):
@@ -276,9 +270,3 @@ class ViewMainMenuTournament:
         else:
             print("Sorry, the name you enter doesn't exist in the database")
 
-    def back_to_menu(self):
-        """ Ask user to go back to the menu """
-        back_to_menu = input(
-            "Would you like to GO BACK to the MENU? Enter 'yes' or 'no': "
-        ).lower()
-        return back_to_menu
