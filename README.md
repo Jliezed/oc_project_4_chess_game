@@ -163,6 +163,7 @@ When 8 players added to the tournament, records can be started:
    source env/bin/activate
    ```
 ---
+#### Install packages & Run the program
 6. Install the packages using requirements.txt
    ```sh
    pip install -r requirements.txt
@@ -172,6 +173,7 @@ When 8 players added to the tournament, records can be started:
    python main.py
    ```
 ---
+#### Generate Flake8
 8. Generate a new Flake8 report
    ```sh
    flake8 --format=html --htmldir=flake-report
