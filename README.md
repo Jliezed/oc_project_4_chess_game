@@ -226,4 +226,4 @@ Project Link: [https://github.com/Jliezed/oc_project_4_chess_game](https://githu
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
-[see sample database JSON file]: https://github.com/Jliezed/oc_project_4_chess_game
+[see sample database JSON file]: https://github.com/Jliezed/oc_project_4_chess_game/blob/main/sample_database.json
