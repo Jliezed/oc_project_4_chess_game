@@ -1,0 +1,443 @@
+{
+  "players": {
+    "1": {
+      "first_name": "Yan",
+      "last_name": "Lok",
+      "fullname": "Yan Lok",
+      "birth_date": "17/02/1990",
+      "gender": "male",
+      "rank": 1,
+      "cumul_score": 2.5,
+      "opponents": [
+        7,
+        5,
+        8,
+        8
+      ]
+    },
+    "2": {
+      "first_name": "Cloe",
+      "last_name": "Han",
+      "fullname": "Cloe Han",
+      "birth_date": "10/01/1992",
+      "gender": "female",
+      "rank": 2,
+      "cumul_score": 0.0,
+      "opponents": [
+        8,
+        6,
+        3,
+        3
+      ]
+    },
+    "3": {
+      "first_name": "Jim",
+      "last_name": "Ven",
+      "fullname": "Jim Ven",
+      "birth_date": "21/01/2000",
+      "gender": "male",
+      "rank": 8,
+      "cumul_score": 2.0,
+      "opponents": [
+        5,
+        7,
+        2,
+        2
+      ]
+    },
+    "4": {
+      "first_name": "Lea",
+      "last_name": "Dim",
+      "fullname": "Lea Dim",
+      "birth_date": "12/02/2000",
+      "gender": "female",
+      "rank": 3,
+      "cumul_score": 2.5,
+      "opponents": [
+        6,
+        8,
+        7,
+        6
+      ]
+    },
+    "5": {
+      "first_name": "Xavier",
+      "last_name": "Lone",
+      "fullname": "Xavier Lone",
+      "birth_date": "23/04/1998",
+      "gender": "male",
+      "rank": 4,
+      "cumul_score": 2.0,
+      "opponents": [
+        3,
+        1,
+        6,
+        7
+      ]
+    },
+    "6": {
+      "first_name": "Ema",
+      "last_name": "Pil",
+      "fullname": "Ema Pil",
+      "birth_date": "04/02/2001",
+      "gender": "female",
+      "rank": 7,
+      "cumul_score": 2.5,
+      "opponents": [
+        4,
+        2,
+        5,
+        4
+      ]
+    },
+    "7": {
+      "first_name": "Anne",
+      "last_name": "Fert",
+      "fullname": "Anne Fert",
+      "birth_date": "29/04/2001",
+      "gender": "female",
+      "rank": 5,
+      "cumul_score": 1.0,
+      "opponents": [
+        1,
+        3,
+        4,
+        5
+      ]
+    },
+    "8": {
+      "first_name": "Claire",
+      "last_name": "Dom",
+      "fullname": "Claire Dom",
+      "birth_date": "21/04/1995",
+      "gender": "female",
+      "rank": 6,
+      "cumul_score": 3.5,
+      "opponents": [
+        2,
+        4,
+        1,
+        1
+      ]
+    }
+  },
+  "tournaments": {
+    "1": {
+      "name": "First T",
+      "location": "Paris",
+      "date": "12/04/2021",
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "players_details": [
+        {
+          "id_database": 1,
+          "fullname": "Yan Lok",
+          "rank": 1,
+          "cumul_score": 2.5,
+          "opponents": [
+            7,
+            5,
+            8,
+            8
+          ]
+        },
+        {
+          "id_database": 8,
+          "fullname": "Claire Dom",
+          "rank": 6,
+          "cumul_score": 3.5,
+          "opponents": [
+            2,
+            4,
+            1,
+            1
+          ]
+        },
+        {
+          "id_database": 6,
+          "fullname": "Ema Pil",
+          "rank": 7,
+          "cumul_score": 2.5,
+          "opponents": [
+            4,
+            2,
+            5,
+            4
+          ]
+        },
+        {
+          "id_database": 4,
+          "fullname": "Lea Dim",
+          "rank": 3,
+          "cumul_score": 2.5,
+          "opponents": [
+            6,
+            8,
+            7,
+            6
+          ]
+        },
+        {
+          "id_database": 5,
+          "fullname": "Xavier Lone",
+          "rank": 4,
+          "cumul_score": 2.0,
+          "opponents": [
+            3,
+            1,
+            6,
+            7
+          ]
+        },
+        {
+          "id_database": 7,
+          "fullname": "Anne Fert",
+          "rank": 5,
+          "cumul_score": 1.0,
+          "opponents": [
+            1,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "id_database": 3,
+          "fullname": "Jim Ven",
+          "rank": 8,
+          "cumul_score": 2.0,
+          "opponents": [
+            5,
+            7,
+            2,
+            2
+          ]
+        },
+        {
+          "id_database": 2,
+          "fullname": "Cloe Han",
+          "rank": 2,
+          "cumul_score": 0.0,
+          "opponents": [
+            8,
+            6,
+            3,
+            3
+          ]
+        }
+      ],
+      "nb_rounds": 4,
+      "rounds": [
+        {
+          "name": "Round 1",
+          "start_date": "23/06/2022 10:00",
+          "end_date": "23/06/2022 10:00",
+          "matches": [
+            [
+              [
+                1,
+                1.0
+              ],
+              [
+                7,
+                0.0
+              ]
+            ],
+            [
+              [
+                2,
+                0.0
+              ],
+              [
+                8,
+                1.0
+              ]
+            ],
+            [
+              [
+                4,
+                0.5
+              ],
+              [
+                6,
+                0.5
+              ]
+            ],
+            [
+              [
+                5,
+                1.0
+              ],
+              [
+                3,
+                0.0
+              ]
+            ]
+          ]
+        },
+        {
+          "name": "Round 2",
+          "start_date": "23/06/2022 10:00",
+          "end_date": "23/06/2022 10:00",
+          "matches": [
+            [
+              [
+                1,
+                1.0
+              ],
+              [
+                5,
+                0.0
+              ]
+            ],
+            [
+              [
+                8,
+                1.0
+              ],
+              [
+                4,
+                0.0
+              ]
+            ],
+            [
+              [
+                6,
+                1.0
+              ],
+              [
+                2,
+                0.0
+              ]
+            ],
+            [
+              [
+                7,
+                1.0
+              ],
+              [
+                3,
+                0.0
+              ]
+            ]
+          ]
+        },
+        {
+          "name": "Round 3",
+          "start_date": "23/06/2022 10:00",
+          "end_date": "23/06/2022 10:00",
+          "matches": [
+            [
+              [
+                1,
+                0.5
+              ],
+              [
+                8,
+                0.5
+              ]
+            ],
+            [
+              [
+                6,
+                1.0
+              ],
+              [
+                5,
+                0.0
+              ]
+            ],
+            [
+              [
+                7,
+                0.0
+              ],
+              [
+                4,
+                1.0
+              ]
+            ],
+            [
+              [
+                2,
+                0.0
+              ],
+              [
+                3,
+                1.0
+              ]
+            ]
+          ]
+        },
+        {
+          "name": "Round 4",
+          "start_date": "23/06/2022 10:00",
+          "end_date": "23/06/2022 10:01",
+          "matches": [
+            [
+              [
+                1,
+                0.0
+              ],
+              [
+                8,
+                1.0
+              ]
+            ],
+            [
+              [
+                6,
+                0.0
+              ],
+              [
+                4,
+                1.0
+              ]
+            ],
+            [
+              [
+                5,
+                1.0
+              ],
+              [
+                7,
+                0.0
+              ]
+            ],
+            [
+              [
+                3,
+                1.0
+              ],
+              [
+                2,
+                0.0
+              ]
+            ]
+          ]
+        }
+      ],
+      "time control": "blitz",
+      "description": "first tournament in Paris"
+    },
+    "2": {
+      "name": "Second T",
+      "location": "London",
+      "date": "10/09/2022",
+      "players": [],
+      "players_details": [],
+      "nb_rounds": 4,
+      "rounds": [],
+      "time control": "bullet",
+      "description": "Second tournament in London"
+    }
+  }
+}
