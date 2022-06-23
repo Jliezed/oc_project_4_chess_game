@@ -24,14 +24,14 @@
   <p align="center">
     Track Players' Scores during a Chess Game tournament: 8 players / 4 rounds / 16 matches.
     <br/>
-    <a href="https://github.com/Jliezed/oc_project_2_BookToScrape"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Jliezed/oc_project_4_chess_game"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Jliezed/oc_project_2_BookToScrape">View Demo</a>
+    <a href="https://github.com/Jliezed/oc_project_4_chess_game">View Demo</a>
     ·
-    <a href="https://github.com/Jliezed/oc_project_2_BookToScrape/issues">Report Bug</a>
+    <a href="https://github.com/Jliezed/oc_project_4_chess_game/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Jliezed/oc_project_2_BookToScrape/issues">Request Feature</a>
+    <a href="https://github.com/Jliezed/oc_project_4_chess_game/issues">Request Feature</a>
   </p>
 </div>
 
@@ -170,6 +170,11 @@ When 8 players added to the tournament, records can be started:
 7. Run the script using the terminal
    ```sh
    python main.py
+   ```
+---
+8. Generate a new Flake8 report
+   ```sh
+   flake8 --format=html --htmldir=flake-report
    ```
 
 
