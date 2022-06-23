@@ -185,8 +185,8 @@ When 8 players added to the tournament, records can be started:
 
 
 <!-- USAGE EXAMPLES -->
-## Database Outputs - JSON file
-
+##  Outputs 
+### Database JSON File
 The program generate a JSON file to keep track of players and tournaments information :
 - [see sample database JSON file](https://github.com/Jliezed/oc_project_4_chess_game/blob/main/sample_database.json)
 
