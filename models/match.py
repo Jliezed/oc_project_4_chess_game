@@ -45,7 +45,7 @@ class Match:
         elif self.score_b > self.score_a:
             print(f"{self.player_b.fullname} won the match")
         else:
-            print(f"Draw Match")
+            print("Draw Match")
 
     def display_players_score(self):
         self.players_scores = (
@@ -59,7 +59,3 @@ class Match:
     # --------------------------------------
     def display_match(self):
         print(f"*{self.player_a.fullname}* VERSUS *{self.player_b.fullname}*")
-
-
-
-

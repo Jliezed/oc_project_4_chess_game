@@ -108,7 +108,7 @@ class ViewMainMenuTournamentTracker:
     # --------------------------------------
     def get_player_fullname_to_change_rank(self):
         player_fullname = input(
-            f"Which player would you like to change the rank ? Enter his/her fullname: "
+            "Which player would you like to change the rank ? Enter his/her fullname: "
         ).title()
         return player_fullname
 
@@ -117,7 +117,7 @@ class ViewMainMenuTournamentTracker:
     # -------------------------------------------------------
     def get_player_fullname_to_remove(self):
         player_fullname = input(
-            f"Enter player fullname to remove to the tournament: "
+            "Enter player fullname to remove to the tournament: "
         ).title()
         return player_fullname
 
@@ -133,8 +133,8 @@ class ViewMainMenuTournamentTracker:
     # -------------------------------------------------------------
     def confirm_reset_players_list(self):
         confirmation = input(
-            f"Do you want to reset the list of players of this tournament?"
-            f" Enter 'yes' or 'no': "
+            "Do you want to reset the list of players of this tournament?"
+            " Enter 'yes' or 'no': "
         ).lower()
         return confirmation
 
@@ -143,9 +143,9 @@ class ViewMainMenuTournamentTracker:
     # -------------------------------------------------------
     def confirm_save_round_score(self):
         confirmation = input(
-            f"Do you want to save the first round (you won't be able to modify scores"
-            f" afterwards) ? "
-            f"Enter 'yes' or 'no': "
+            "Do you want to save the first round (you won't be able to modify scores"
+            " afterwards) ? "
+            "Enter 'yes' or 'no': "
         ).lower()
         return confirmation
 
@@ -166,7 +166,3 @@ class ViewMainMenuTournamentTracker:
             "Would you like to GO BACK to the TOURNAMENT TRACKER MENU? Enter 'yes' or 'no': "
         ).lower()
         return back_to_menu
-
-
-
-

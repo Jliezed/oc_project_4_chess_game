@@ -451,10 +451,10 @@ class TournamentTrackerController:
                 # Get players details of the tournament from the Database
                 players_details = \
                     self.tournament_to_track.get_players_details_from_database(
-                    self.tournament_to_track.name,
-                    self.tournaments_table,
-                    self.database.tournament_query,
-                )
+                        self.tournament_to_track.name,
+                        self.tournaments_table,
+                        self.database.tournament_query,
+                    )
 
                 # Convert player in players_details into player object
                 for player in players_details:

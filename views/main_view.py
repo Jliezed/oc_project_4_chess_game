@@ -269,4 +269,3 @@ class ViewMainMenuTournament:
                 )
         else:
             print("Sorry, the name you enter doesn't exist in the database")
-

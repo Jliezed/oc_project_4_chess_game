@@ -75,8 +75,6 @@ class Tournament:
         )
         return self.players
 
-
-
     # -------------------------------------------------------
     # COMMON:
     # User select 'reset-p' to remove all players to the tournament

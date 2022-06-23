@@ -162,12 +162,3 @@ class Player:
         players_table.update(
             {"opponents": self.opponents}, player_query.fullname == self.fullname
         )
-
-
-
-
-
-
-
-
-
