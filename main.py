@@ -3,4 +3,5 @@ from controllers.main_controller import MainController
 
 controller = MainController()
 
-controller.start_program()
+if __name__ == "__main__":
+    controller.start_program()
