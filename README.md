@@ -8,55 +8,29 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
 
+[![oc][oc-project-shield]][oc-project-url]
+[![OOP][oop-shield]][oop-url]
+[![mvc][mvc-pattern-shield]][mvc-pattern-url]
+[![TinyDB][tinydb-shield]][tinydb-url]
+[![flake8][flake8-shield]][flake8-url]
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
 
-<h3 align="center">OC - PROJECT N°4 - CHESS GAME TOURNAMENT TRACKER</h3>
+<h1 align="center">OC - PROJECT N°4 - CHESS GAME TOURNAMENT TRACKER</h1>
 
   <p align="center">
     Track Players' Scores during a Chess Game tournament: 8 players / 4 rounds / 16 matches.
     <br/>
-    <a href="https://github.com/Jliezed/oc_project_4_chess_game"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/Jliezed/oc_project_4_chess_game">View Demo</a>
-    ·
-    <a href="https://github.com/Jliezed/oc_project_4_chess_game/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/Jliezed/oc_project_4_chess_game/issues">Request Feature</a>
-  </p>
+    </p>
 </div>
 
 
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#outputs">Outputs</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
+![chess-game-readme](images/readme.png)
+<a href="https://unsplash.com/fr/photos/7SjEuEF06Zw"><small>By Hassan Pasha</small></a>
 
 
 
@@ -197,34 +171,21 @@ The program generate a JSON file to keep track of players and tournaments inform
 
 
 
-
-<!-- CONTACT -->
-## Contact
-
-Jliezed
-
-Project Link: [https://github.com/Jliezed/oc_project_4_chess_game](https://github.com/Jliezed/oc_project_4_chess_game/blob/main/sample_database.json)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/Jliezed/oc_project_4_chess_game.svg?style=for-the-badge
-[contributors-url]: https://github.com/Jliezed/oc_project_4_chess_game/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Jliezed/oc_project_4_chess_game.svg?style=for-the-badge
-[forks-url]: https://github.com/Jliezed/oc_project_4_chess_game/network/members
-[stars-shield]: https://img.shields.io/github/stars/Jliezed/oc_project_4_chess_game.svg?style=for-the-badge
-[stars-url]: https://github.com/Jliezed/oc_project_4_chess_game/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Jliezed/oc_project_4_chess_game.svg?style=for-the-badge
-[issues-url]: https://github.com/Jliezed/oc_project_4_chess_game/issues
-[license-shield]: https://img.shields.io/github/license/Jliezed/oc_project_4_chess_game.svg?style=for-the-badge
-[license-url]: https://github.com/Jliezed/oc_project_4_chess_game/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
+[oc-project-shield]: https://img.shields.io/badge/OPENCLASSROOMS-PROJECT-blueviolet?style=for-the-badge
+[oc-project-url]: https://openclassrooms.com/fr/paths/518-developpeur-dapplication-python
+
+[oop-shield]: https://img.shields.io/badge/-OOP-blue?style=for-the-badge
+[oop-url]: https://en.wikipedia.org/wiki/Object-oriented_programming
+
+[tinydb-shield]: https://img.shields.io/badge/-TINYDB-blue?style=for-the-badge
+[tinydb-url]: https://tinydb.readthedocs.io/en/latest/
+
+[flake8-shield]: https://img.shields.io/badge/-FLAKE8-blue?style=for-the-badge
+[flake8-url]: https://flake8.pycqa.org/en/latest/
+
+[mvc-pattern-shield]: https://img.shields.io/badge/-MVC%20PATTERN-blue?style=for-the-badge
+[mvc-pattern-url]: https://en.wikipedia.org/wiki/Model–view–controller
+
 [see sample database JSON file]: https://github.com/Jliezed/oc_project_4_chess_game/blob/main/sample_database.json
